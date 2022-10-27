@@ -18,6 +18,7 @@ import time
 from datetime import datetime
 from datetime import timedelta
 
+
 cnxn = mysql.connector.connect( host="us-cdbr-east-06.cleardb.net",
                                 port="3306",
                                 user="b70d451b4ff985",
@@ -186,6 +187,14 @@ if authentication_status == None:
         unsafe_allow_html=True
     )
 
+    def hide_anchor_link():
+        st.markdown("""
+            <style>
+            .css-15zrgzn {display: none}
+            .css-eczf16 {display: none}
+            .css-jn99sy {display: none}
+            </style>
+            """, unsafe_allow_html=True)
     texto  = ('🔒Estamos mejorando la privacidad de la información, si aún no cuentas con tus credenciales, comunicarte con:')
     st.caption( f'<h6 style="color:#FFFFFF;">{texto}</h6>', unsafe_allow_html=True )
 
@@ -994,3 +1003,12 @@ def sidebar_bg(side_bg):
         )
     side_bg = 'nooa.jpg'
     sidebar_bg(side_bg)
+
+def hide_anchor_link():
+    st.markdown("""
+        <style>
+        .css-15zrgzn {display: none}
+        .css-eczf16 {display: none}
+        .css-jn99sy {display: none}
+        </style>
+        """, unsafe_allow_html=True)
