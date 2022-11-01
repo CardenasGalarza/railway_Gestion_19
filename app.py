@@ -873,7 +873,7 @@ if authentication_status:
 
                 sssss = driver.find_element_by_xpath('//*[@id="dropdown-user-menu"]/div/button[1]')
                 sssss.click()
-                time.sleep(7)
+                time.sleep(9)
 
                 liddni3 = driver.find_element_by_xpath('//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
                 liddni3.click()
