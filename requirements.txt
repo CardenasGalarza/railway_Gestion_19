@@ -11,4 +11,4 @@ mysql-connector-python==8.0.28
 streamlit-authenticator==0.1.5
 deta
 pyautogui
-selenium
+selenium==4.2.0
