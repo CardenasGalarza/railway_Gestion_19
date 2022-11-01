@@ -44,46 +44,47 @@ def run_selenium():
         username = 'caramburu_TDP'
         passwordd = 'WebSys29*T*'
 
+
         driver.get("https://auth.movistaradvertising.com/login?logout")
         time.sleep(3)
 
-        email = driver.find_element_by_xpath('//INPUT[@id="username"]')
-        email.send_keys(username)
+        xpath = driver.find_element_by_xpath('//INPUT[@id="username"]')
+        xpath.send_keys(username)
         time.sleep(2)
 
-        psw = driver.find_element_by_xpath('//INPUT[@id="password"]')
-        psw.send_keys(passwordd)
+        xpath = driver.find_element_by_xpath('//INPUT[@id="password"]')
+        xpath.send_keys(passwordd)
         time.sleep(2)
 
-        liddni3 = driver.find_element_by_xpath('//BUTTON[@type="submit"][text()="Ingresar"]')
-        liddni3.click()
+        xpath = driver.find_element_by_xpath('//BUTTON[@type="submit"][text()="Ingresar"]')
+        xpath.click()
         time.sleep(3)
 
 
-        sssss = driver.find_element_by_xpath('//*[@id="dropdown-user-menu"]/div/button[1]')
-        sssss.click()
+        xpath = driver.find_element_by_xpath('//*[@id="dropdown-user-menu"]/div/button[1]')
+        xpath.click()
         time.sleep(7)
 
-        liddni3 = driver.find_element_by_xpath('//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
-        liddni3.click()
+        xpath = driver.find_element_by_xpath('//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
+        xpath.click()
         time.sleep(6)
 
 
-        cel = driver.find_element_by_xpath('//INPUT[@id="inputGsmList"]')
-        cel.send_keys(celu)
+        xpath = driver.find_element_by_xpath('//INPUT[@id="inputGsmList"]')
+        xpath.send_keys(celu)
         time.sleep(6)
 
-        men = driver.find_element_by_xpath('//TEXTAREA[@id="txtMessage"]')
-        men.send_keys(mensaje)
+        xpath = driver.find_element_by_xpath('//TEXTAREA[@id="txtMessage"]')
+        xpath.send_keys(mensaje)
         time.sleep(6)
 
 
-        liddni3 = driver.find_element_by_xpath('//BUTTON[@id="buttonProcess"]')
-        liddni3.click()
+        xpath = driver.find_element_by_xpath('//BUTTON[@id="buttonProcess"]')
+        xpath.click()
         time.sleep(5)
 
-        liddni3 = driver.find_element_by_xpath('//*[@id="buttonSend"]')
-        liddni3.click()
+        xpath = driver.find_element_by_xpath('//*[@id="buttonSend"]')
+        xpath.click()
         time.sleep(5)
 
         driver.quit()
