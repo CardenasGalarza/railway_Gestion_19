@@ -832,7 +832,6 @@ if authentication_status:
                 
             st.button("🗑️Limpiar ", on_click=clear_text)
 
-            import glob
             import os
             import time
 
