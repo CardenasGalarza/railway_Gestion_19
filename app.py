@@ -922,7 +922,7 @@ if authentication_status:
                     driver.quit()
 
                     # Wait for the element to be rendered:
-                    element = WebDriverWait(driver, 10).until(lambda x: x.find_elements(by=By.XPATH, value=xpath))
+                    element = WebDriverWait(driver, 10).until(lambda x: x.find_elements(by=By.XPATH))
                     name = element[0].get_property('attributes')[0]['name']
                 return name
 
