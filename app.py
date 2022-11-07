@@ -842,7 +842,7 @@ if authentication_status:
             from selenium.webdriver.chrome.service import Service as ChromeService # Similar thing for firefox also!
 
             options = Options()
-            options.add_argument("--headless")
+            #options.add_argument("--headless")
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
             options.add_argument("--disable-gpu")
@@ -855,7 +855,6 @@ if authentication_status:
             #chrome_service.creationflags = CREATE_NO_WINDOW
             options = webdriver.ChromeOptions()
             #options.add_argument("--window-size=1920,1080")
-
             driver = webdriver.Chrome(service=chrome_service, chrome_options=options)
             driver.maximize_window()
 
