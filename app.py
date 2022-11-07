@@ -1,25 +1,18 @@
-import streamlit as st
-from dateutil.parser import parse
-import streamlit.components.v1 as components
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import time
-
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+import os
+
+chrome_options = webdriver.ChromeOptions()
+chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--no-sandbox")
+driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+
+params = {'behavior': 'allow', 'downloadPath': os.getcwd()}
+driver.execute_cdp_cmd('Page.setDownloadBehavior', params)
 
 
-st.title("Auto Search App")
-
-driver = webdriver.Chrome(ChromeDriverManager().install())
-
-wait = WebDriverWait(driver, 20)
-
-# url = 'https://wego.here.com/'
-# driver.get(url)
 
 username = 'caramburu_TDP'
 passwordd = 'WebSys29*T*'
@@ -70,3 +63,8 @@ xpath.click()
 time.sleep(5)
 
 driver.quit()
+
+
+
+
+
