@@ -24,18 +24,52 @@ driver = webdriver.Firefox(
     options=firefoxOptions,
     service=service,
 )
-driver.get(URL)
 
-try:
-    WebDriverWait(driver, TIMEOUT).until(
-        EC.visibility_of_element_located((By.XPATH, XPATH,))
-    )
+username = 'caramburu_TDP'
+passwordd = 'WebSys29*T*'
 
-except TimeoutException:
-    st.warning("Timed out waiting for page to load")
-    driver.quit()
+driver.get("https://auth.movistaradvertising.com/login?logout")
+time.sleep(3)
 
-time.sleep(10)
-elements = driver.find_elements_by_xpath(XPATH)
-st.write([el.text for el in elements])
+xpath = driver.find_element_by_xpath('//INPUT[@id="username"]')
+xpath.send_keys(username)
+time.sleep(2)
+
+xpath = driver.find_element_by_xpath('//INPUT[@id="password"]')
+xpath.send_keys(passwordd)
+time.sleep(2)
+
+xpath = driver.find_element_by_xpath('//BUTTON[@type="submit"][text()="Ingresar"]')
+xpath.click()
+time.sleep(3)
+
+
+xpath = driver.find_element_by_xpath('//*[@id="dropdown-user-menu"]/div/button[2]')
+xpath.click()
+time.sleep(7)
+
+xpath = driver.find_element_by_xpath('//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
+xpath.click()
+time.sleep(6)
+
+celu = '925266696'
+mensaje = 'prueba77'
+
+xpath = driver.find_element_by_xpath('//INPUT[@id="inputGsmList"]')
+xpath.send_keys(celu)
+time.sleep(6)
+
+xpath = driver.find_element_by_xpath('//TEXTAREA[@id="txtMessage"]')
+xpath.send_keys(mensaje)
+time.sleep(6)
+
+
+xpath = driver.find_element_by_xpath('//BUTTON[@id="buttonProcess"]')
+xpath.click()
+time.sleep(5)
+
+xpath = driver.find_element_by_xpath('//*[@id="buttonSend"]')
+xpath.click()
+time.sleep(5)
+
 driver.quit()
