@@ -10,9 +10,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.firefox import GeckoDriverManager
 
-URL = "https://www.unibet.fr/sport/football/europa-league/europa-league-matchs"
-XPATH = "//*[@class='ui-mainview-block eventpath-wrapper']"
-TIMEOUT = 20
 
 st.title("Test Selenium")
 st.markdown("You should see some random Football match text below in about 21 seconds")
@@ -33,11 +30,11 @@ time.sleep(3)
 
 xpath = driver.find_element_by_xpath('//INPUT[@id="username"]')
 xpath.send_keys(username)
-time.sleep(2)
+time.sleep(6)
 
 xpath = driver.find_element_by_xpath('//INPUT[@id="password"]')
 xpath.send_keys(passwordd)
-time.sleep(2)
+time.sleep(6)
 
 xpath = driver.find_element_by_xpath('//BUTTON[@type="submit"][text()="Ingresar"]')
 xpath.click()
