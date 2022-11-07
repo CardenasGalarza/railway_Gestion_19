@@ -8,9 +8,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+
+
 st.title("Auto Search App")
 
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(ChromeDriverManager().install())
+
 wait = WebDriverWait(driver, 20)
 
 # url = 'https://wego.here.com/'
