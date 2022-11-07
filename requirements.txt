@@ -12,4 +12,5 @@ streamlit-authenticator==0.1.5
 deta
 pyautogui
 selenium
-webdriver-manager
+#webdriver-manager
+webdriver_manager
