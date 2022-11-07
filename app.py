@@ -65,10 +65,5 @@ if __name__ == "__main__":
         ---
         """, unsafe_allow_html=True)
 
-    st.balloons()
-    if st.button('Start Selenium run'):
-        st.info('Selenium is running, please wait...')
-        run_selenium()
 
-        st.info('Successful finished. Selenium log file is shown below...')
-        show_selenium_log()
+    run_selenium()
