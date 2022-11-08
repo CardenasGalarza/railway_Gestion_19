@@ -861,7 +861,7 @@ if authentication_status:
 
 
                     driver.get("https://auth.movistaradvertising.com/login?logout")
-                    time.sleep(3)
+                    time.sleep(2)
 
 
                     xpath = driver.find_element("xpath", '//INPUT[@id="username"]')
@@ -874,36 +874,36 @@ if authentication_status:
 
                     xpath = driver.find_element("xpath", '//BUTTON[@type="submit"][text()="Ingresar"]')
                     xpath.click()
-                    time.sleep(3)
+                    time.sleep(2)
 
 
                     xpath = driver.find_element("xpath", '//*[@id="dropdown-user-menu"]/div/button[2]')
                     xpath.click()
-                    time.sleep(7)
+                    time.sleep(2)
 
                     xpath = driver.find_element("xpath", '//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
                     xpath.click()
-                    time.sleep(6)
+                    time.sleep(2)
 
                     #celu = '925266696'
                     #mensaje = 'prueba77'
 
                     xpath = driver.find_element("xpath", '//INPUT[@id="inputGsmList"]')
                     xpath.send_keys(celu)
-                    time.sleep(6)
+                    time.sleep(2)
 
                     xpath = driver.find_element("xpath", '//TEXTAREA[@id="txtMessage"]')
                     xpath.send_keys(mensaje)
-                    time.sleep(6)
+                    time.sleep(2)
 
 
                     xpath = driver.find_element("xpath", '//BUTTON[@id="buttonProcess"]')
                     xpath.click()
-                    time.sleep(5)
+                    time.sleep(2)
 
                     xpath = driver.find_element("xpath", '//*[@id="buttonSend"]')
                     xpath.click()
-                    time.sleep(5)
+                    time.sleep(2)
 
                     driver.quit()
 
