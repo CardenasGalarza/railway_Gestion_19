@@ -18,7 +18,8 @@ passwordd = 'WebSys29*T*'
 driver.get("https://auth.movistaradvertising.com/login?logout")
 time.sleep(3)
 
-xpath = driver.find_element_by_xpath('//INPUT[@id="username"]')
+
+xpath = driver.find_element("xpath", '//INPUT[@id="username"]')
 xpath.send_keys(username)
 time.sleep(2)
 
