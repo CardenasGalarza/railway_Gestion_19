@@ -23,42 +23,6 @@ xpath = driver.find_element("xpath", '//INPUT[@id="username"]')
 xpath.send_keys(username)
 time.sleep(2)
 
-xpath = driver.find_element_by_xpath('//INPUT[@id="password"]')
-xpath.send_keys(passwordd)
-time.sleep(2)
-
-xpath = driver.find_element_by_xpath('//BUTTON[@type="submit"][text()="Ingresar"]')
-xpath.click()
-time.sleep(3)
-
-
-xpath = driver.find_element_by_xpath('//*[@id="dropdown-user-menu"]/div/button[2]')
-xpath.click()
-time.sleep(7)
-
-xpath = driver.find_element_by_xpath('//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
-xpath.click()
-time.sleep(6)
-
-celu = '925266696'
-mensaje = 'prueba77'
-
-xpath = driver.find_element_by_xpath('//INPUT[@id="inputGsmList"]')
-xpath.send_keys(celu)
-time.sleep(6)
-
-xpath = driver.find_element_by_xpath('//TEXTAREA[@id="txtMessage"]')
-xpath.send_keys(mensaje)
-time.sleep(6)
-
-
-xpath = driver.find_element_by_xpath('//BUTTON[@id="buttonProcess"]')
-xpath.click()
-time.sleep(5)
-
-xpath = driver.find_element_by_xpath('//*[@id="buttonSend"]')
-xpath.click()
-time.sleep(5)
 
 driver.quit()
 
