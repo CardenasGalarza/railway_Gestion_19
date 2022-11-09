@@ -744,6 +744,7 @@ if authentication_status:
                 textogestion = "Realizar Actividades💻"
                 st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,Cyan, Cyan);color:Black;font-size:22px;border-radius:2%;">{textogestion}</p>', unsafe_allow_html=True)
             with col1:
+
                 filter_type3 = st.selectbox(
                     "Accion",
                     (
@@ -755,7 +756,6 @@ if authentication_status:
                         "7F_REQ MAL GENERADO",
                         "Requiere Visita Tecnica",
                     ),
-                    key="filter_type3",
                     help="""
                     Ten encuenta tu accion `Ticket` inf.
                     """,
