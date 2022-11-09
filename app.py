@@ -617,7 +617,7 @@ if authentication_status:
             print(espera)
 
             filtro = st.selectbox(
-                "Accion",
+                "Tickets",
                 (espera
                 ),
                 key="filter_type3",
