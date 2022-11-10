@@ -1,0 +1,577 @@
+import pickle
+from pathlib import Path
+import pandas as pd
+import numpy as np
+#from soupsieve import select  # pip install pandas openpyxl
+import streamlit_authenticator as stauth  # pip install streamlit-authenticator
+############################################ OCULTAR INFROMACION NO IMPORTANTE
+import base64
+import mysql.connector
+from mysql.connector import Error
+#import pyodbc
+import streamlit as st
+############################################ OCULTAR INFROMACION NO IMPORTANTE
+import warnings
+warnings.filterwarnings('ignore')
+#########################################3333
+##########################
+import time
+from datetime import datetime
+from datetime import timedelta
+import gspread
+import re
+
+cnxn = mysql.connector.connect( host="us-cdbr-east-06.cleardb.net",
+                                port="3306",
+                                user="b550dc65be0b71",
+                                passwd="a3fa9457",
+                                db="heroku_af31a2d889c5388"
+                                )
+cursor = cnxn.cursor()
+
+st.set_page_config(page_title='bdtickets-Averias', page_icon="🌀", layout='centered', initial_sidebar_state='auto')
+## borrar nombres de la pagina
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
+def add_bg_from_url():
+    st.markdown(
+         f"""
+         <style>
+         .stApp {{
+             background-image: url("https://cdn.pixabay.com/photo/2015/04/23/21/59/hot-air-balloon-736879_960_720.jpg 1x, https://cdn.pixabay.com/photo/2015/04/23/21/59/hot-air-balloon-736879_1280.jpg");
+             background-attachment: fixed;
+             background-size: cover
+         }}
+         </style>
+         """,
+         unsafe_allow_html=True
+     )
+add_bg_from_url()
+#st.set_page_config(page_title="Sales Dashboard", page_icon=":bar_chart:", layout="wide")
+# --- USER AUTHENTICATION ---
+names = ['Giancarlos Cardenas', 'Genesis Medrano', 'Luis Llerena', 'DIANA BERNEDO', 'VIVIAN CERVERA', 'CAROL CHUNGA', 'LAURA VIERA', 'MERCEDES RAYMUNDO', 'MONTES CABANILLAS', 'RENZO RIMARACHIN', 'LORENA BENAVIDES', 'NANCY YEREN', 'GIULIANA BELLIDO', 'CARMEN HUAMANCHUMO', 'GABRIEL SANTA ANA', 'CARMEN POMA REYES', 'JOSE ECHEVARRIA', 'YORMAN MORI', 'ENZO PAULINO', 'GUSTAVO SALCEDO', 'KAREN MAYORCA', 'LESLIE PRUDENCIO', 'BARBARA HUAMANCHUMO', 'Jose Ricardo', 'Eber Hinostroza', 'Bot cardenas']
+usernames = ['Cardenas', 'Genesis', 'LLLERENAL', 'BERNEDO', 'CERVERA', 'CHUNGA', 'VIERA', 'RAYMUNDO', 'CABANILLAS', 'RIMARACHIN', 'BENAVIDES', 'YEREN', 'BELLIDO', 'ANDREA', 'SANTA ANA', 'POMA REYES', 'ECHEVARRIA', 'MORI', 'PAULINO', 'SALCEDO', 'MAYORCA', 'PRUDENCIO', 'HUAMANCHUMO', 'Argomedo', 'Hinostroza', 'Bot']
+
+# load hashed passwords
+file_path = Path(__file__).parent / "hashed_pw.pkl"
+with file_path.open("rb") as file:
+    hashed_passwords = pickle.load(file)
+
+authenticator = stauth.Authenticate(names, usernames, hashed_passwords,
+    "sales_dashboard", "abcdef", cookie_expiry_days=30)
+
+name, authentication_status, username = authenticator.login("Login", "main")
+#print(username)
+#### fondo al costado
+def sidebar_bg(side_bg):
+   side_bg_ext = 'jpg'
+   st.markdown(
+      f"""
+      <style>
+      [data-testid="stSidebar"] > div:first-child {{
+          background: url(data:image/{side_bg_ext};base64,{base64.b64encode(open(side_bg, "rb").read()).decode()});
+      }}
+      </style>
+      """,
+      unsafe_allow_html=True,
+      )
+side_bg = 'nooa.jpg'
+sidebar_bg(side_bg)
+
+st.markdown(
+    """
+    <style>
+
+    header .css-1595djx e8zbici2{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    }
+
+    header .logo-text{
+        margin: 0;
+        padding: 10px 26px;
+        font-weight: bold;
+        color: rgb(60, 255, 0);
+        font-size: 0.8em;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+# para los botones horizontal
+st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+
+
+
+if authentication_status == False:
+    st.error("Username/password is incorrect")
+
+        ## borrar nombres de la pagina
+    hide_streamlit_style = """
+                <style>
+                #MainMenu {visibility: hidden;}
+                footer {visibility: hidden;}
+                header {visibility: hidden;}
+                </style>
+                """
+    st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+
+if authentication_status == None:
+    st.warning("Please enter your username and password")
+
+        ## borrar nombres de la pagina
+    hide_streamlit_style = """
+                <style>
+                #MainMenu {visibility: hidden;}
+                footer {visibility: hidden;}
+                header {visibility: hidden;}
+                </style>
+                """
+    st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+
+
+    st.markdown(
+        """
+        <style>
+
+        header .css-1595djx e8zbici2{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        }
+
+        header .logo-text{
+            margin: 0;
+            padding: 10px 26px;
+            font-weight: bold;
+            color: rgb(60, 255, 0);
+            font-size: 0.8em;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+    #### fondo al costado
+    def sidebar_bg(side_bg):
+        side_bg_ext = 'jpg'
+        st.markdown(
+            f"""
+            <style>
+            [data-testid="stSidebar"] > div:first-child {{
+                background: url(data:image/{side_bg_ext};base64,{base64.b64encode(open(side_bg, "rb").read()).decode()});
+            }}
+            </style>
+            """,
+            unsafe_allow_html=True,
+            )
+        side_bg = 'nooa.jpg'
+        sidebar_bg(side_bg)
+
+    # para los botones horizontal
+    st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+
+
+
+    st.markdown(
+        f"""
+        <header class="css-1595djx e8zbici2">
+            <p class="logo-text">App Alarmas 👨🏻‍💻Giancarlos .C</p>
+        </header>
+        """,
+        unsafe_allow_html=True
+    )
+
+    def hide_anchor_link():
+        st.markdown("""
+            <style>
+            .css-15zrgzn {display: none}
+            .css-eczf16 {display: none}
+            .css-jn99sy {display: none}
+            </style>
+            """, unsafe_allow_html=True)
+    texto  = ('🔒Estamos mejorando la privacidad de la información, si aún no cuentas con tus credenciales, comunicarte con:')
+    st.caption( f'<h6 style="color:#FFFFFF;">{texto}</h6>', unsafe_allow_html=True )
+
+    textoo = ('\n\n👨🏻‍💻Luis Llerena. \n\n👨🏻‍💻Giancarlos Cardenas.')
+    st.caption( f'<h6 style="color:#FFFFFF;">{textoo}</h6>', unsafe_allow_html=True )
+    ###
+    ####
+    ####
+    ####
+    ######
+
+
+
+if authentication_status:
+    # ---- SIDEBAR ----
+    authenticator.logout("Logout", "sidebar")
+    st.sidebar.title(f"Bienvenid@ {name}")
+
+    st.title("GESTION TICKETS PENDIENTES💻")
+
+    # Add a sidebar
+    st.sidebar.subheader("Primero cargar Trouble Tickets")
+
+
+    # Setup file upload
+    uploaded_file = st.sidebar.file_uploader(
+                            label="Upload your CSV or Excel file. (200MB max)",
+                            type=['csv', 'xlsx', 'XLS'])
+
+    global df
+    if uploaded_file is not None:
+        print(uploaded_file)
+        print("hello")
+
+        try:
+            Trouble = pd.read_excel(uploaded_file, engine="openpyxl", skiprows=3)
+            ######3######################
+            Troubledt=Trouble[["Incident Number",	"Area_CRM",	"Categorization Tier 2", "Last Modified By", "CUSTOMERID_CRM__c", "TELEFONO_REFERENCIA_1_CRM"]]
+            Troubledt.rename(columns={'Incident Number': 'codreq'}, inplace=True)
+            Troubledt = Troubledt.drop_duplicates(subset=['codreq'])
+            Troubledt = Troubledt.astype("string")
+            Troubledt = Troubledt.fillna('')
+            gc = gspread.service_account(filename='datacargar-947843f340e2.json')
+            sh = gc.open("DT_PEDIR_COLUM")
+            #  el 0 simbol del numero de hoja en este caso es la primera hoja = 0
+            worksheet = sh.get_worksheet(0)
+            #borrar datos total y dejar encabezado
+            worksheet.resize(rows=1)
+            worksheet.resize(rows=30)
+            #cargar datos df
+            worksheet.update([Troubledt.columns.values.tolist()] + Troubledt.values.tolist())
+            ################################################################
+            ################################################################
+
+            datos = {
+                'CONTRATA_TOA__c': ['ANALISIS DE RUIDO PEX','ANOVO','CABECERA','COBRA','COMFICA','CUARENTENA COE','DOMINION','ENERGIA','EZENTIS','FIBRA','GAC-VOIP','INGENIERIA HFC',
+                        'LARI','LITEYCA','TRABAJOS PROGRAMADOS','TRANSMISIONES','TRATAMIENTO INTERMITENCIA','TRIAJE HFC','TRATAMIENTO CALL PIN TV-M1'],
+                'codctr' : ['485','333','60','15','363','429','335','211','19','209','353','435','245','470','365','210','483','474','434']
+            }
+            df = pd.DataFrame(datos)
+            #print(df)
+            datos2 = {
+                'Categorization Tier 3': ['Control Remoto'],
+                'codmotv' : ['I129']
+            }
+            df2 = pd.DataFrame(datos2)
+            #print(df2)
+
+            
+            Trouble=Trouble[['Incident Number','CREATION_DATE_CRM__c','Tipo de incidencia padre','CONTRATA_TOA__c','Categorization Tier 3','CUSTOMER_NAME_CRM__c',
+            'OBSERVATIONS_CRM__c','STREETTYPE_CRM__c','STREETNAME_CRM__c','STREETNUMBER_CRM__c','SUBUNITTYPE_CRM__c','DEPARTMENT_CRM','DISTRICT_CRM__c',
+            'Network Technology__c','LEX_NIL__c','BORNE_NIL__c','TROBA_ TYPE_NIL__c','TAP_STREET_NIL__c','PLANE_OLT_PORT','NODE_HFC_OLT_HOSTNAME',
+            'currentVozTelephone_OMS__c','currentVozProduct_OMS__c','currentVozServiceTechnology_OMS__c','currentBafAccessid_OMS__c','CFS_SERVICE_TECHNOLOGY_NIL__c'
+            ]]
+            #<<------------------------->>
+            #comvertir año 1070-01-01 con  FECHA REAL
+            Trouble['CREATION_DATE_CRM__c'] = pd.to_datetime(Trouble['CREATION_DATE_CRM__c'], errors='coerce', unit='d', origin='1899-12-30')
+            Trouble['CREATION_DATE_CRM__c'] = pd.to_datetime(Trouble.CREATION_DATE_CRM__c, errors = 'coerce').dt.strftime("%Y/%m/%d  %H:%M:%S")
+            #concatenated_df=pd.concat([Trouble,cms],ignore_index=True)
+            union1 = pd.merge(left=Trouble,right=df, how='left', left_on='CONTRATA_TOA__c', right_on='CONTRATA_TOA__c')
+            union2 = pd.merge(left=union1,right=df2, how='left', left_on='Categorization Tier 3', right_on='Categorization Tier 3')
+            Trouble2=union2[['Incident Number','CREATION_DATE_CRM__c','Tipo de incidencia padre','codctr','CONTRATA_TOA__c','codmotv','Categorization Tier 3','CUSTOMER_NAME_CRM__c',
+            'OBSERVATIONS_CRM__c','STREETTYPE_CRM__c','STREETNAME_CRM__c','STREETNUMBER_CRM__c','SUBUNITTYPE_CRM__c','DEPARTMENT_CRM','DISTRICT_CRM__c',
+            'Network Technology__c','LEX_NIL__c','BORNE_NIL__c','TROBA_ TYPE_NIL__c','TAP_STREET_NIL__c','PLANE_OLT_PORT','NODE_HFC_OLT_HOSTNAME',
+            'currentVozTelephone_OMS__c','currentVozProduct_OMS__c','currentVozServiceTechnology_OMS__c','currentBafAccessid_OMS__c','CFS_SERVICE_TECHNOLOGY_NIL__c'
+            ]]
+            Trouble2["CFS_SERVICE_TECHNOLOGY_NIL__c"] = Trouble2["CFS_SERVICE_TECHNOLOGY_NIL__c"].replace({'VOIP':'VOZ','GPON':'DATOS','CATV':'TV','DOCSIS':''}, regex=True)
+            Trouble2 = Trouble2.rename(columns={'CFS_SERVICE_TECHNOLOGY_NIL__c':'BORRAR',})
+            Trouble2.columns = ['codreq','fec_regist','codedo','codctr','desnomctr','codmotv','desmotv','nomcli','desobsordtrab','destipvia','desnomvia','numvia','destipurb','codofcadm',
+            'desdtt','tiptecnologia','codtap','codbor','codtrtrn','desurb','nroplano','codnod','numtelefvoip','codpromo','tiplinea','codcli','BORRAR']
+            Trouble2['AVERIAS']='Trouble'
+
+
+            Trouble2['fec_regist'] = pd.to_datetime(Trouble2.fec_regist, errors = 'coerce').dt.strftime("%Y/%m/%d  %H:%M:%S")
+            Trouble2 = Trouble2.fillna('')
+
+            gc = gspread.service_account(filename='datacargar-947843f340e2.json')
+            sh = gc.open("DT_AVERIAS_Trouble")
+
+            #  el 0 simbol del numero de hoja en este caso es la primera hoja = 0
+            worksheet = sh.get_worksheet(0)
+
+            #borrar datos total y dejar encabezado
+            worksheet.resize(rows=1)
+            worksheet.resize(rows=30)
+            #cargar datos df
+            worksheet.update([Trouble2.columns.values.tolist()] + Trouble2.values.tolist())
+
+            # ver datos de google sheet
+            #dataframe = pd.DataFrame(worksheet.get_all_records())
+            #print(dataframe)
+
+
+
+
+
+            st.write("SER CARGO CON EXITO Trouble Tickets")
+            #st.write(df)
+            # para ver la cantidad de registros
+            total = str(len(Trouble2))
+            st.success('Total de '+total+' Registros')
+
+        except Exception as e:
+            print(e)
+            gc = gspread.service_account(filename='datacargar-947843f340e2.json')
+            sh = gc.open("DT_AVERIAS_Trouble")
+            #  el 0 simbol del numero de hoja en este caso es la primera hoja = 0
+            worksheet = sh.get_worksheet(0)
+            Trouble2 = pd.DataFrame(worksheet.get_all_records())
+            #print(Trouble2)
+            #Trouble2 = pd.read_csv('AVERIAS/DT_AVERIAS_Trouble.csv',sep=',')
+            warnings.simplefilter("ignore")
+            df = pd.read_excel(uploaded_file, dtype=str, engine='xlrd')
+            
+
+            cms=df[['codreq','fec_regist','codedo','codctr','desnomctr','codmotv','desmotv','nomcli','desobsordtrab','destipvia','desnomvia','numvia','destipurb','codofcadm',
+            'desdtt','tiptecnologia','codtap','codbor','codtrtrn','desurb','nroplano','codnod','numtelefvoip','codpromo','tiplinea','codcli'
+            ]]
+            
+            # para ver la cantidad de registros
+            total = str(len(cms))
+            st.success('CMS total de '+total+' Registros')
+
+            cms['AVERIAS']='CMS'
+            cms['BORRAR']=''
+            cms=pd.concat([Trouble2,cms],ignore_index=True)
+            #cms.to_csv('borrarrrr.csv',index=False, sep=";")
+            #print(cms)
+            profesiones=["DECO","TV","SEÑAL","TARJETA","REMOTO","CONTROL","CABLE","CANAL","HD","PIX","VISUA","PANTALL"]
+            cond=[cms['desobsordtrab'].str.contains(profesion,case=False).fillna(False) for profesion in profesiones]
+            cms['TV']=np.select(cond,profesiones,default = '')
+            profesiones=["NAVE","LENT","CORTE","INTER","POTEN","WI","IP","VELOC","NAT","DUO","TRIO","PARAM","TAP","ELECT","LEVAN","EGA","SPEED","ERNET","MASIV",
+            "LLEGA","SEÑA","SERVI","MODEM","LUCES","ROUT","CONECT","SRN","DOWN","REPET","NIVEL","RNET","NAEV","NAV","OFFLINE","SATURAC","MODEN",
+            "CLIENTE ACTIVO","RECOMIE","RUTINA","TRIAJE","SATUR","SNR","ANULAC","MAISVA","CLEAR","PEX","PAQUET","MASVIA","SIVA","MASVI","AMP","SE TRANS",
+            "INFANC","UP","M´DEM","MÓDEM","PORTADO","TOA","NVGA","PUERTO"]
+            cond=[cms['desobsordtrab'].str.contains(profesion,case=False).fillna(False) for profesion in profesiones]
+            cms['DATOS']=np.select(cond,profesiones,default = '')
+            profesiones=["LINEA","VOZ","VOLUMEN","TELEFO","LLAMA","FIJ","LOCU","RECIB","FONO","SALID","VOIP","CASILLA","TLF","REGISTR","REALIZA","LLAMDAS","MUERTA","MUERTO",
+            "TONO","MULTIDESTINO","LLMAR","TELF","IDENTIF","RUIDO","ESCUCHA"]
+            cond=[cms['desobsordtrab'].str.contains(profesion,case=False).fillna(False) for profesion in profesiones]
+            cms['VOZ']=np.select(cond,profesiones,default = '')
+            profesiones=["NAT","JUEGO","CAMARA","PUERTO","CAMBIO IP","CAMBIO DE IP","SERVIDOR"]
+            cond=[cms['desobsordtrab'].str.contains(profesion,case=False).fillna(False) for profesion in profesiones]
+            cms['CAMBIO_IP']=np.select(cond,profesiones,default = '')
+            #CAMBIAR todo lo encontrado y poner por puerto
+            cms['CAMBIO_IP'] = cms['CAMBIO_IP'].replace(profesiones,'PUERTO')
+            #Reordenar para ver TRUE O FALSE
+            cms["TV"] = cms["TV"].str.len() != 0
+            cms["TV"] = cms["TV"].replace({True:'TV',False:''}, regex=True)
+            cms["DATOS"] = cms["DATOS"].str.len() != 0
+            cms["DATOS"] = cms["DATOS"].replace({True:'DATOS',False:''}, regex=True)
+            cms["VOZ"] = cms["VOZ"].str.len() != 0
+            cms["VOZ"] = cms["VOZ"].replace({True:'VOZ',False:''}, regex=True)
+            cms["PRIORIDAD"] = cms['TV'] + " " + cms['DATOS'] + " " + cms['VOZ']
+            cms["PRIORIDAD"] = cms["PRIORIDAD"].str.lstrip()
+            cms["PRIORIDAD"] = cms["PRIORIDAD"].str.rstrip()
+            cms["PRIORIDAD"] = cms["PRIORIDAD"].replace({' ':'-'}, regex=True)
+            cms["PRIORIDAD"] = cms["PRIORIDAD"].replace({'--':'-'}, regex=True)
+            cms[['TV','DATOS','VOZ']] = cms[['TV','DATOS','VOZ']].replace(r'^\s*$', np.nan, regex=True)
+            cms['PRIORIDAD_2'] = np.where(cms['TV'].isna(), cms['DATOS'], cms['TV'])
+            cms['PRIORIDAD_2'] = np.where(cms['PRIORIDAD_2'].isna(), cms['VOZ'], cms['PRIORIDAD_2'])
+            #JUNTAR DE LA COLUMNA AL COSTADO
+            cms['PRIORIDAD_2'] = np.where(cms['PRIORIDAD_2'].isna(),
+                                    cms['BORRAR'],
+                                    cms['PRIORIDAD_2'])
+            cms[['PRIORIDAD','PRIORIDAD_2']] = cms[['PRIORIDAD','PRIORIDAD_2']].replace({'':'OTROS', np.nan:'OTROS'})
+            cms.rename(columns={'PRIORIDAD':'Total_Prioridad','PRIORIDAD_2':'Primera_Variable','PORT_ID':'Codigo_Gpon'},inplace=True)
+
+
+            #convertir columna a numero
+            regex = re.compile(r'[^0-9]') # Eliminamos todo lo que no sean números
+            cms['codcli']=cms['codcli'].replace(regex, '').fillna(0).apply(pd.to_numeric, errors='ignore')
+            #print("listo")
+            # EXTARER DATOS
+            gpontick = pd.read_csv('PLANTA_GPON/Gpon_ticket.csv', sep=',')
+            gpontick['SUBSCRIPCION']=gpontick['SUBSCRIPCION'].apply(pd.to_numeric, errors='ignore')
+            #print(gpontick)
+            #gpontick = pd.read_csv('PLANTA_GPON/Gpon_ticket.csv', sep=',')
+            union = pd.merge(left=cms,right=gpontick, how='left', left_on='codcli', right_on='SUBSCRIPCION')
+            union['Date'] = pd.to_datetime(union['fec_regist'], errors='coerce')
+            union['Date'] = union['Date'].dt.strftime('%B-%d')
+            #TODO tabla dinamica
+            uu  = pd.pivot_table(union, index=['OLT_ALIAS'], columns=['Date'], aggfunc='size')
+            ##################################################################
+            #uu.to_csv("EXPORTADO/ticket_averias.csv", sep=';')
+            #gpontick = pd.read_csv('EXPORTADO/ticket_averias.csv', sep=';')
+            #df1 = uu.iloc[3:-1, : ]
+            #aa = gpontick.drop(['Date'], axis=1)
+            #añss = (aa.columns)
+            #gpontick[añss] = gpontick[añss].fillna(0)
+            #gpontick[añss] = gpontick[añss].astype(int)
+            tb_olt = pd.read_csv('PLANTA_GPON/Tabla_dinamica_OLT.csv', sep=',')
+            #print(tb_olt)
+            #tb_olt = pd.read_csv('EXPORTADO/Tabla_dinamica_OLT.csv', sep=',')
+            #TODO sumar una tabla dinamica
+            gpontick = uu.apply(pd.to_numeric, downcast='signed',errors='ignore')
+            gpontick['Total'] = gpontick.sum(axis=1)
+            union2 = pd.merge(left=gpontick,right=tb_olt, how='left', left_on='OLT_ALIAS', right_on='OLT_ALIAS')
+            #TODO para dividir
+            #union2['formula'] = union2.Total / union2.value
+            #TODO para color
+            #df_style = union2.style.applymap(lambda x: 'color:blue', subset=["OLT_ALIAS"]) \
+            #.background_gradient(cmap="coolwarm",axis=None, vmin=0.0039, vmax=0.005, subset=["formula"])
+            #df_style
+            union = pd.merge(left=union,right=tb_olt, how='left', left_on='OLT_ALIAS', right_on='OLT_ALIAS')
+            union = union.rename(columns={'value':'Cliente',})
+            union['fec_regist'] = pd.to_datetime(union['fec_regist'], errors='coerce')
+            union['Year'] = union['fec_regist'].dt.year
+            union['Month'] = union['fec_regist'].dt.month
+            union['day'] = union['fec_regist'].dt.day
+            union = union.drop(['Date'], axis=1)
+            #gpontick=gpontick.drop([0])
+            #gpontick.to_csv("EXPORTADO/ticket_averias.csv", sep=';')
+            #TODO CRUCE CON OLT
+            df = pd.read_excel('NODO/NODO.xlsx')
+            #Trouble = pd.read_excel('OLT/OLT.xlsx')
+            df = df[['NODO','Descripcion','Nombre OLT']]
+            df = df[df['NODO'].notna()]
+            df = df.drop_duplicates(subset=['NODO'])
+            df = df.groupby(['NODO','Descripcion','Nombre OLT']).agg(NODO_size=('NODO', 'size')).reset_index()
+            ###########
+            #print(df)
+            #print(union)
+            union3 = pd.merge(left=union,right=df, how='left', left_on='codnod', right_on='NODO')
+            #print(union3)
+            union = union3.drop(['NODO','NODO_size'], axis=1)
+            union["tiptecnologia"] = union["tiptecnologia"].replace({'FTTH':'GPON'}, regex=True)
+            #####
+            ## TODO lo nuevo data 
+            ####
+            data = pd.DataFrame()
+            nombres = ['G', 'R', '']
+            edades = ["GPON", "HFC", "HFC"]
+            data['nroplanooo'] = nombres
+            data['tiptecnologia'] = edades
+            #convertir columna a numero
+            regex = re.compile(r'[^A-Z]') # Eliminamos todo lo que no sean números
+            union['nroplanooo']=union['nroplano'].replace(regex, '').fillna(0).astype(str)
+            #df = df[df.Año != 2022]
+            union = pd.merge(union, data, on='nroplanooo', how='outer')
+            #JUNTAR DE LA COLUMNA AL COSTADO
+            union['tiptecnologia_x'] = np.where(union['tiptecnologia_x'].isna(),
+                                    union['tiptecnologia_y'],
+                                    union['tiptecnologia_x'])
+
+            union = union.drop(['BORRAR','Nombre OLT','tiptecnologia_y','nroplanooo'], axis=1)
+            union['tiptecnologia_x']=union['tiptecnologia_x'].replace("","HFC")
+
+            ### pedir a trabol del inicio origina para aumnetar columnas cruzar
+            #limpio duplicado
+            gc = gspread.service_account(filename='datacargar-947843f340e2.json')
+            sh = gc.open("DT_PEDIR_COLUM")
+            #  el 0 simbol del numero de hoja en este caso es la primera hoja = 0
+            worksheet = sh.get_worksheet(0)
+            Troubledt = pd.DataFrame(worksheet.get_all_records())
+            #cruzar la data actual con trabol origial y aumter columnas requeridos 
+            union = pd.merge(union, Troubledt, on='codreq', how='outer')
+            ######################
+
+            union['fec_regist'] = pd.to_datetime(union.fec_regist, errors = 'coerce').dt.strftime("%Y/%m/%d  %H:%M:%S")
+            
+            ### lo mejor converir a numero
+            union['CUSTOMERID_CRM__c']=pd.to_numeric(union['CUSTOMERID_CRM__c'], errors='coerce').astype('Int64')
+            #convertir columna a numero
+            regex = re.compile(r'[^0-9]')
+            union['codcli']=union['codcli'].replace(regex, '').fillna(0).astype(int)
+            union = union.astype("string")
+            union = union.fillna('')
+            ## ORDENAR DATA
+            union = union.sort_values(by='fec_regist').reset_index(drop=True)
+            ######## ORDENADO FIN ##################
+            gc = gspread.service_account(filename='datacargar-947843f340e2.json')
+            sh = gc.open("Gpon_ticket_WEB")
+            #  el 0 simbol del numero de hoja en este caso es la primera hoja = 0
+            worksheet = sh.get_worksheet(0)
+            #borrar datos total y dejar encabezado
+            worksheet.resize(rows=1)
+            worksheet.resize(rows=30)
+            #cargar datos df
+            worksheet.update([union.columns.values.tolist()] + union.values.tolist())
+
+            st.write("SE CARGO CON EXITO AHORA YA PUEDES ACTUALIZAR \n EL EXCEL DE LAS TABLAS DINAMICAS")
+            # para ver la cantidad de registros
+            total = str(len(union))
+            st.success('Consolidado total de '+total+' Registros')
+
+                        ## borrar nombres de la pagina
+            hide_streamlit_style = """
+                        <style>
+                        #MainMenu {visibility: hidden;}
+                        footer {visibility: hidden;}
+                        </style>
+                        """
+            st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
+
+    ## borrar nombres de la pagina
+    hide_streamlit_style = """
+                <style>
+                #MainMenu {visibility: hidden;}
+                footer {visibility: hidden;}
+                </style>
+                """
+    st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
+    st.markdown(
+        """
+        <style>
+
+        header .css-1595djx e8zbici2{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        }
+
+        header .logo-text{
+            margin: 0;
+            padding: 10px 26px;
+            font-weight: bold;
+            color: rgb(60, 255, 0);
+            font-size: 0.8em;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        f"""
+        <header class="css-1595djx e8zbici2">
+            <p class="logo-text">App Alarmas 👨🏻‍💻Giancarlos .C</p>
+        </header>
+        """,
+        unsafe_allow_html=True
+    )
+    ###
+    ####
+    ####
+    ####
+    ######
+    ######
+primaryColor = st.get_option("theme.primaryColor")
+s = f"""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Atma:wght@600&display=swap');
+div.stButton > button:first-child {{ border: 5px solid {primaryColor}; border-radius:20px 20px 20px 20px; }}
+<style>
+"""
+st.markdown(s, unsafe_allow_html=True)
+
+## borrar nombres de la pagina
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
