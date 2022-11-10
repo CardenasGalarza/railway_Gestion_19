@@ -1516,7 +1516,7 @@ if authentication_status:
                 with col5:
                     pass
                 with col3 :
-                    
+                    st.balloons()
                     if st.button("✉️Enviar"):
 
                         with webdriver.Chrome(options=options, service_log_path='selenium.log') as driver:
@@ -1570,7 +1570,9 @@ if authentication_status:
 
                             driver.quit()
                             st.balloons()
-                            st.success('Mensaje enviado! ✅')
+
+
+                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">Mensaje enviado</p>', unsafe_allow_html=True)
 
 
         except Error as e:
