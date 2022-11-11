@@ -68,6 +68,20 @@ authenticator = stauth.Authenticate(names, usernames, hashed_passwords,
 name, authentication_status, username = authenticator.login("Login", "main")
 #print(username)
 #### fondo al costado
+def sidebar_bg(side_bg):
+   side_bg_ext = 'jpg'
+   st.markdown(
+      f"""
+      <style>
+      [data-testid="stSidebar"] > div:first-child {{
+          background: url(data:image/{side_bg_ext};base64,{base64.b64encode(open(side_bg, "rb").read()).decode()});
+      }}
+      </style>
+      """,
+      unsafe_allow_html=True,
+      )
+side_bg = 'nooa.jpg'
+sidebar_bg(side_bg)
 
 
 st.markdown(
@@ -144,21 +158,7 @@ if authentication_status == None:
         """,
         unsafe_allow_html=True
     )
-    #### fondo al costado
-    def sidebar_bg(side_bg):
-        side_bg_ext = 'jpg'
-        st.markdown(
-            f"""
-            <style>
-            [data-testid="stSidebar"] > div:first-child {{
-                background: url(data:image/{side_bg_ext};base64,{base64.b64encode(open(side_bg, "rb").read()).decode()});
-            }}
-            </style>
-            """,
-            unsafe_allow_html=True,
-            )
-        side_bg = 'nooa.jpg'
-        sidebar_bg(side_bg)
+
 
     # para los botones horizontal
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
@@ -199,6 +199,8 @@ if authentication_status:
     # ---- SIDEBAR ----
     authenticator.logout("Logout", "sidebar")
     st.sidebar.title(f"Bienvenid@ {name}")
+    #### fondo al costado
+
 
 
     # 1=sidebar menu, 2=horizontal menu, 3=horizontal menu w/ custom menu
@@ -1479,7 +1481,7 @@ if authentication_status:
                 from selenium.webdriver.common.by import By
 
                 options = Options()
-                options.add_argument("--headless")
+                #options.add_argument("--headless")
                 options.add_argument("--no-sandbox")
                 options.add_argument("--disable-dev-shm-usage")
                 options.add_argument("--disable-gpu")
@@ -1527,7 +1529,7 @@ if authentication_status:
 
 
                             driver.get("https://auth.movistaradvertising.com/login?logout")
-                            time.sleep(3)
+                            time.sleep(1)
 
                             xpath = driver.find_element_by_xpath('//INPUT[@id="username"]')
                             xpath.send_keys(username)
@@ -1544,29 +1546,29 @@ if authentication_status:
 
                             xpath = driver.find_element_by_xpath('//*[@id="dropdown-user-menu"]/div/button[1]')
                             xpath.click()
-                            time.sleep(7)
+                            time.sleep(2)
 
                             xpath = driver.find_element_by_xpath('//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
                             xpath.click()
-                            time.sleep(6)
+                            time.sleep(3)
 
-
+                            #FIXME aqui demora
                             xpath = driver.find_element_by_xpath('//INPUT[@id="inputGsmList"]')
                             xpath.send_keys(celu)
-                            time.sleep(6)
+                            time.sleep(4)
 
                             xpath = driver.find_element_by_xpath('//TEXTAREA[@id="txtMessage"]')
                             xpath.send_keys(mensaje)
-                            time.sleep(6)
+                            time.sleep(4)
 
 
                             xpath = driver.find_element_by_xpath('//BUTTON[@id="buttonProcess"]')
                             xpath.click()
-                            time.sleep(5)
+                            time.sleep(2)
 
                             xpath = driver.find_element_by_xpath('//*[@id="buttonSend"]')
                             xpath.click()
-                            time.sleep(5)
+                            time.sleep(2)
 
                             driver.quit()
                             st.balloons()
@@ -1737,21 +1739,7 @@ if authentication_status:
         )
     add_bg_from_url()
 
-    #### fondo al costado
-    def sidebar_bg(side_bg):
-        side_bg_ext = 'jpg'
-        st.markdown(
-            f"""
-            <style>
-            [data-testid="stSidebar"] > div:first-child {{
-                background: url(data:image/{side_bg_ext};base64,{base64.b64encode(open(side_bg, "rb").read()).decode()});
-            }}
-            </style>
-            """,
-            unsafe_allow_html=True,
-            )
-        side_bg = 'nooa.jpg'
-        sidebar_bg(side_bg)
+
 
     def hide_anchor_link():
         st.markdown("""
