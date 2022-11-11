@@ -1,5 +1,3 @@
-
-
 import streamlit as st
 from streamlit_option_menu import option_menu
 import pickle
@@ -929,7 +927,6 @@ if authentication_status:
                                 cnxn.commit()
                     except Error as e:
                         print('Gian', e)
-        
 
                 st.write("")
                 #title = st.text_input("INGRESA TU GESTION")
@@ -943,6 +940,147 @@ if authentication_status:
                     
                 #st.button("clear text input", on_click=clear_text)
 
+######################################
+######################################
+                filter_type8 = st.selectbox(
+                    "Mensaje",
+                    (
+                        f"Gracias por llamar a mi empresa {dfunom}",
+                        "Has llegado a mi empresa. Tu llamada es importante para nosotros",
+                        "7C_TEMA COMERCIALES",
+                        "7D_GENERA NUEVO REQ",
+                        #"7E_NO SE UBICA CLITE",
+                        "7F_REQ MAL GENERADO",
+                        "Requiere Visita Tecnica",
+                        "En espera",
+                    ),
+                    key="filter_type8",
+                    help="""
+                    Ten encuenta tu accion `Ticket` inf.
+                    """,
+                )
+                try:
+
+                    #TODO SIVERVPARA BARRA AZUL
+                    celu = '925266696'
+                    print(celu)
+
+                    #title = st.text_input("INGRESA TU GESTION")
+                    mensaje = filter_type8
+
+
+                    import glob
+                    import os
+                    import time
+
+                    import streamlit as st
+                    from selenium import webdriver
+                    from selenium.webdriver.chrome.options import Options
+                    from selenium.webdriver.support.wait import WebDriverWait
+                    from selenium.webdriver.common.by import By
+
+                    options = Options()
+                    #options.add_argument("--headless")
+                    options.add_argument("--no-sandbox")
+                    options.add_argument("--disable-dev-shm-usage")
+                    options.add_argument("--disable-gpu")
+                    options.add_argument("--disable-features=NetworkService")
+                    options.add_argument("--window-size=1920x1080")
+                    options.add_argument("--disable-features=VizDisplayCompositor")
+
+
+                    def delete_selenium_log():
+                        if os.path.exists('selenium.log'):
+                            os.remove('selenium.log')
+
+
+                    def show_selenium_log():
+                        if os.path.exists('selenium.log'):
+                            with open('selenium.log') as f:
+                                content = f.read()
+                                st.code(content)
+
+
+                    # not required anymore:
+                    # def get_chromedriver_path():
+                    #     results = glob.glob('/**/chromedriver', recursive=True)  # workaround on streamlit sharing
+                    #     return results[0]
+                    #st.button("Inicio")
+                    col1, col2, col3 , col4, col5 = st.columns(5)
+
+                    with col1:
+                        pass
+                    with col2:
+                        pass
+                    with col4:
+                        pass
+                    with col5:
+                        pass
+                    with col3 :
+                        st.balloons()
+                        if st.button("✉️Enviar"):
+
+                            with webdriver.Chrome(options=options, service_log_path='selenium.log') as driver:
+
+
+                                username = 'caramburu_TDP'
+                                passwordd = 'WebSys29*T*'
+
+
+                                driver.get("https://auth.movistaradvertising.com/login?logout")
+                                time.sleep(1)
+
+                                xpath = driver.find_element_by_xpath('//INPUT[@id="username"]')
+                                xpath.send_keys(username)
+                                time.sleep(2)
+
+                                xpath = driver.find_element_by_xpath('//INPUT[@id="password"]')
+                                xpath.send_keys(passwordd)
+                                time.sleep(2)
+
+                                xpath = driver.find_element_by_xpath('//BUTTON[@type="submit"][text()="Ingresar"]')
+                                xpath.click()
+                                time.sleep(2)
+
+
+                                xpath = driver.find_element_by_xpath('//*[@id="dropdown-user-menu"]/div/button[1]')
+                                xpath.click()
+                                time.sleep(2)
+
+                                xpath = driver.find_element_by_xpath('//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
+                                xpath.click()
+                                time.sleep(4)
+
+                                #FIXME aqui demora
+                                xpath = driver.find_element_by_xpath('//INPUT[@id="inputGsmList"]')
+                                xpath.send_keys(celu)
+                                time.sleep(3)
+
+                                xpath = driver.find_element_by_xpath('//TEXTAREA[@id="txtMessage"]')
+                                xpath.send_keys(mensaje)
+                                time.sleep(3)
+
+
+                                xpath = driver.find_element_by_xpath('//BUTTON[@id="buttonProcess"]')
+                                xpath.click()
+                                time.sleep(2)
+
+                                xpath = driver.find_element_by_xpath('//*[@id="buttonSend"]')
+                                xpath.click()
+                                time.sleep(2)
+
+                                driver.quit()
+                                st.balloons()
+                                st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">Mensaje enviado</p>', unsafe_allow_html=True)
+
+
+
+
+                except Error as e:
+                    print('Gian', e)
+
+###################3
+####################
                 #st.button("Inicio")
                 col1, col2, col3 , col4, col5 = st.columns(5)
 
@@ -1454,6 +1592,7 @@ if authentication_status:
                 print(cantipro)
                 #print("Tranferir" + " " + cantipro)
                 st.warning("Total tickest por llamar: " + " " + cantipro)
+
 
             if  genre == 'Mensaje':
                 #TODO SIVERVPARA BARRA AZUL
