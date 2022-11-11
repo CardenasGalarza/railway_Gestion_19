@@ -1481,7 +1481,7 @@ if authentication_status:
                 from selenium.webdriver.common.by import By
 
                 options = Options()
-                #options.add_argument("--headless")
+                options.add_argument("--headless")
                 options.add_argument("--no-sandbox")
                 options.add_argument("--disable-dev-shm-usage")
                 options.add_argument("--disable-gpu")
@@ -1541,7 +1541,7 @@ if authentication_status:
 
                             xpath = driver.find_element_by_xpath('//BUTTON[@type="submit"][text()="Ingresar"]')
                             xpath.click()
-                            time.sleep(3)
+                            time.sleep(2)
 
 
                             xpath = driver.find_element_by_xpath('//*[@id="dropdown-user-menu"]/div/button[1]')
@@ -1555,11 +1555,11 @@ if authentication_status:
                             #FIXME aqui demora
                             xpath = driver.find_element_by_xpath('//INPUT[@id="inputGsmList"]')
                             xpath.send_keys(celu)
-                            time.sleep(4)
+                            time.sleep(3)
 
                             xpath = driver.find_element_by_xpath('//TEXTAREA[@id="txtMessage"]')
                             xpath.send_keys(mensaje)
-                            time.sleep(4)
+                            time.sleep(3)
 
 
                             xpath = driver.find_element_by_xpath('//BUTTON[@id="buttonProcess"]')
