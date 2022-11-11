@@ -942,6 +942,16 @@ if authentication_status:
 
 ######################################
 ######################################
+                col1, col2, col3 , col4, col5 = st.columns(5)
+
+                with col1:
+                    pass
+                with col2:
+                    pass
+                with col4:
+                    pass
+                with col1:
+                    celu = st.text_input('Numero')
                 filter_type8 = st.selectbox(
                     "Mensaje",
                     (
@@ -962,8 +972,8 @@ if authentication_status:
                 try:
 
                     #TODO SIVERVPARA BARRA AZUL
-                    celu = '925266696'
-                    print(celu)
+                    #celu = '925266696'
+                    #print(celu)
 
                     #title = st.text_input("INGRESA TU GESTION")
                     mensaje = filter_type8
@@ -1014,9 +1024,9 @@ if authentication_status:
                         pass
                     with col4:
                         pass
-                    with col5:
+                    with col1:
                         pass
-                    with col3 :
+                    with col5 :
                         st.balloons()
                         if st.button("✉️Enviar"):
 
