@@ -631,7 +631,6 @@ if authentication_status:
         st.sidebar.image("logo2.png", width=290)
 
 
-
         page_names = ['GPON', 'HFC']
         page = st.sidebar.radio('Selecciona inf. Tecnoligia💻',page_names, index=0)
         #######
@@ -671,11 +670,14 @@ if authentication_status:
         df = pd.read_sql(sql, cnxn)
         dfg = df[df['GESTOR'] == name]
         date = datetime.now()
-        tcanti = (date.strftime("%Y-%m-%d"))
+        tcanti = (date.strftime("%Y-%d-%m"))
+        #print(tcanti)
     ##### cantidad de cerradas
         df = dfg
         df['FEC_CERRAR'] = pd.to_datetime(df['FEC_CERRAR']).dt.date
-        df['FEC_CERRAR'] = pd.to_datetime(df['FEC_CERRAR'], format='%Y-%m-%d')
+        #df['FEC_CERRAR'] = pd.to_datetime(df['FEC_CERRAR'], format='%Y-%m-%d')
+        df['FEC_CERRAR'] = pd.to_datetime(df['FEC_CERRAR'])
+        #print(df)
         canti = str(len(df[df['FEC_CERRAR'] == tcanti]))
         #print(canti)
         st.markdown(f'<p class="big-font"; style="text-align:center;color:Cyan;font-size:24px"><b>👉🏻  {canti} ✔️{pendca}</b></p>', unsafe_allow_html=True)
@@ -767,7 +769,7 @@ if authentication_status:
 
             genre = st.radio(
                 "Establece tu preferencia de actividad",
-                ('Programar', 'En espera', 'Finalizar', 'Analisis', 'Dashboard', 'Mensaje'))
+                ('Programar', 'En espera','Finalizar', 'Analisis', 'Dashboard'))
 
             if  genre == 'Programar':
                 #TODO SIVERVPARA BARRA AZUL
@@ -890,6 +892,7 @@ if authentication_status:
                         Ten encuenta tu accion `Ticket` inf.
                         """,
                     )
+
                 with col1:
                     try:
                         if st.button("📞No se ubica cliente"):
@@ -927,6 +930,7 @@ if authentication_status:
                                 cnxn.commit()
                     except Error as e:
                         print('Gian', e)
+        
 
                 st.write("")
                 #title = st.text_input("INGRESA TU GESTION")
@@ -937,8 +941,6 @@ if authentication_status:
                     st.session_state["text"] = ""
                     
                 st.button("🗑️Limpiar ", on_click=clear_text)
-                    
-                #st.button("clear text input", on_click=clear_text)
 
 ######################################
 ######################################
@@ -990,7 +992,7 @@ if authentication_status:
                     from selenium.webdriver.common.by import By
 
                     options = Options()
-                    #options.add_argument("--headless")
+                    options.add_argument("--headless")
                     options.add_argument("--no-sandbox")
                     options.add_argument("--disable-dev-shm-usage")
                     options.add_argument("--disable-gpu")
@@ -1091,7 +1093,6 @@ if authentication_status:
 
 ###################3
 ####################
-                #st.button("Inicio")
                 col1, col2, col3 , col4, col5 = st.columns(5)
 
                 with col1:
@@ -1103,7 +1104,6 @@ if authentication_status:
                 with col5:
                     pass
                 with col3 :
-                    
 
                     sql = """
                     SELECT * FROM bdtickets  WHERE ACCION = 'En espera'
@@ -1113,10 +1113,10 @@ if authentication_status:
                     #espera = esperadt2['codreq']
                     estoesp = int(len(esperadt2))
                     
-                    print(estoesp)
+                    #print(estoesp)
 
                     if estoesp <= 2:
-
+                        
                         if st.button("✔️Cerrar"):
                             #def __init__(self):
                             #    st.experimental_rerun()
@@ -1168,6 +1168,264 @@ if authentication_status:
                     else:
                         st.error('Tienes 3 tickets en esepra ⚠️')
 
+
+            if  genre == 'Finalizar':
+
+                #TODO SIVERVPARA BARRA AZUL
+                my_bar = st.progress(0)
+                ## fecha para programar y cerrar
+                date = datetime.now()
+                tiempo = (date.strftime("%d-%m-%Y %H:%M:%S"))
+                #print(tiempo) # DD Month, YYYY HH:MM:SS
+
+                options = (df2['codreq'].unique())
+
+                add  = str('CERRAR')
+                nom = str(name)
+                adwe = (str(options)[2:-2])
+                #cursor.execute("UPDATE bdtickets SET ESTADO = ?, GESTOR = ? WHERE codreq = ?", add, nom, adwe)
+                sql = "UPDATE bdtickets SET ESTADO = %s, GESTOR = %s WHERE codreq = %s AND ESTADO='PROGRAMADO'"
+                val = (add, nom, adwe)
+                cursor.execute(sql, val)
+
+
+                options = (df['codreq'].unique())
+
+                add  = str('PROGRAMADO')
+                nom = str(name)
+                adwe = (str(options)[2:-2])
+                #st.info(dfu2)
+
+                #cursor.execute("UPDATE bdtickets SET ESTADO = ?, GESTOR = ? WHERE codreq = ?", add, nom, adwe)
+                #st.info(dfu2)
+                ### un ejemplo para texto
+                #st.info(desobsordtrab)
+                #st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,Cyan, Cyan);color:BLACK;font-size:16px;border-radius:2%;">{canti}</p>', unsafe_allow_html=True)
+                st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,Cyan, Cyan);color:BLACK;font-size:16px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+
+
+                
+                col1, col2, col3 = st.columns(3)
+
+
+
+                with col1:
+                    st.markdown("**Numero de tickets**")
+                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfu2}</p>', unsafe_allow_html=True)
+
+                    #filter_page_or_query = st.markdown("Dimension to filter #1"), st.markdown("<P style='text-align: center; color: BLUE;'>Some title</P>", unsafe_allow_html=True)
+
+                with col2:
+                    st.markdown("**Codigo de cliente**")
+                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{codcli}</p>', unsafe_allow_html=True)
+
+                    
+
+                with col3:
+                    st.markdown("**Fecha de Ticket**")
+                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{fec_regist}</p>', unsafe_allow_html=True)
+
+
+                with col1:
+                    st.markdown("**Tecnologia**")
+                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{tiptecnologia_x}</p>', unsafe_allow_html=True)
+
+
+                with col2:
+                    st.markdown("**Telefono**")
+                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">_{numtelefvoip}</p>', unsafe_allow_html=True)
+
+
+                with col3:
+                    st.markdown("**Telf Ref**")
+                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{TELEFONO_REFERENCIA_1_CRM}</p>', unsafe_allow_html=True)
+
+
+                with col1:
+                    st.markdown("**Nodo**")
+                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{codnod}</p>', unsafe_allow_html=True)
+
+                with col2:
+                    st.markdown("**CategTier 2**")
+                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{Categorization_Tier2}</p>', unsafe_allow_html=True)
+
+                with col3:
+                    st.markdown("**Observacion**")
+                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{desmotv}</p>', unsafe_allow_html=True)
+
+                with col1:
+                    st.markdown("**Cuestomerid crm**")
+                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{CUSTOMERID_CRM__c}</p>', unsafe_allow_html=True)
+
+                with col2:
+                    st.markdown("**Area crm**")
+                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{Area_CRM}</p>', unsafe_allow_html=True)
+                
+                with col3:
+                    st.markdown("**Observacion 2**")
+                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:15px;border-radius:2%;">{desobsordtrab}</p>', unsafe_allow_html=True)
+                
+                with col1:
+                    st.write("")
+                    st.write("")
+                    st.write("")
+                    st.write("")
+                    st.write("")
+                    textogestion = "Realizar Actividades💻"
+                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,Cyan, Cyan);color:Black;font-size:22px;border-radius:2%;">{textogestion}</p>', unsafe_allow_html=True)
+                with col1:
+                    filter_type3 = st.selectbox(
+                        "Accion",
+                        (
+                            "71_REVERIFICA SIN DEFECTO",
+                            "7B_SOLUCION EN LINEA",
+                            "7C_TEMA COMERCIALES",
+                            "7D_GENERA NUEVO REQ",
+                            "7E_NO SE UBICA CLITE",
+                            "7F_REQ MAL GENERADO",
+                            "Requiere Visita Tecnica",
+                        ),
+                        key="filter_type3",
+                        help="""
+                        Ten encuenta tu accion `Ticket` inf.
+                        """,
+                    )
+
+
+                st.write("")
+                #title = st.text_input("INGRESA TU GESTION")
+                raw_text = st.text_area("Observación", key="text")
+                #form = st.form(key='text')
+                #print(input)
+                def clear_text():
+                    st.session_state["text"] = ""
+                    
+                st.button("🗑️Limpiar ", on_click=clear_text)
+                    
+                #st.button("clear text input", on_click=clear_text)
+
+                #st.button("Inicio")
+                col1, col2, col3 , col4, col5 = st.columns(5)
+
+                with col1:
+                    pass
+                with col2:
+                    pass
+                with col4:
+                    pass
+                with col5:
+                    pass
+                with col3 :
+                    
+                    if st.button("😮‍💨Fin"):
+                        #def __init__(self):
+                        #    st.experimental_rerun()
+
+                        sql1 = "UPDATE bdtickets SET ACCION = %s, OBS = %s, FEC_CERRAR = %s WHERE codreq = %s AND ACTIVO = '1' "
+                        #sql1 = "INSERT INTO gestionacc (codreq, ACCION) VALUES (%s, %s)"
+                        val1 = (filter_type3,raw_text,tiempo ,dfu2)
+                        cursor.execute(sql1, val1)
+                        cnxn.commit()
+
+                        sql1 = "UPDATE bdtickets SET ESTADO = %s,GESTOR = '', FEC_PROG = '',ACTIVO = '0', LLAMADA = '0',ACCION ='' WHERE GESTOR = %s AND ACCION = '7E_NO SE UBICA CLITE'"
+                        #sql1 = "INSERT INTO gestionacc (codreq, ACCION) VALUES (%s, %s)"
+                        val1 = ('PENDIENTE', name)
+                        cursor.execute(sql1, val1)
+                        cnxn.commit()
+
+                        #cursor.close()
+                        #cnxn.close()
+                            ###TODO IMPORTANTE ES PARA REFRESCAR LA PAGINA
+                            #st.experimental_rerun()
+                            #st.legacy_caching.clear_cache()
+                            #st.legacy_caching.clear_cache()
+                        #import pyautogui
+                        #pyautogui.hotkey("ctrl","F5")
+                        #st.experimental_singleton.clear()
+                        st.experimental_rerun()
+
+
+            xs = ['Cardenas', 'LLLERENAL', 'Hinostroza', 'Argomedo', 'VIERA']
+            bs = (username in xs)
+            if  genre == 'Dashboard':
+                if bs == True:
+                #if  'Cardenas' == username:      #
+                    st.markdown("""
+                        <iframe title="Gastion19" width="1140" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=0c6caef7-27cf-4548-849c-1970f2d9b0bf&autoAuth=true&ctid=9744600e-3e04-492e-baa1-25ec245c6f10" frameborder="0" allowFullScreen="true"></iframe>
+                    """, unsafe_allow_html=True)
+
+                    # st.experimental_rerun()
+                    ## fondo total
+                    def add_bg_from_url():
+                        st.markdown(
+                            f"""
+                            <style>
+                            .stApp {{
+                                background-image: url("https://cdn.pixabay.com/photo/2015/04/23/21/59/hot-air-balloon-736879_960_720.jpg 1x, https://cdn.pixabay.com/photo/2015/04/23/21/59/hot-air-balloon-736879_1280.jpg");
+                                background-attachment: fixed;
+                                background-size: cover
+                            }}
+                            </style>
+                            """,
+                            unsafe_allow_html=True
+                        )
+                    add_bg_from_url() 
+                    
+            if  genre == 'Analisis':
+                st.text("Cuadro de gestion individual!!!") 
+
+                st.success("Total tickets cerradas: " + " " + canti) 
+                ### programado
+                sql = """
+                SELECT GESTOR, codreq, FEC_PROG FROM bdtickets WHERE  ESTADO="PROGRAMADO" ;
+                """
+                df = pd.read_sql(sql, cnxn)
+                dfg = df[df['GESTOR'] == name]
+                #print(dfg)
+                #date = datetime.now()
+                #tcanti = (date.strftime("%Y-%m-%d"))
+            ##### cantidad de programadas
+                #dfp = dfg
+                #dfp['FEC_PROG'] = pd.to_datetime(dfp['FEC_PROG']).dt.date
+                #dfp['FEC_PROG'] = pd.to_datetime(dfp['FEC_PROG'], format='%Y-%m-%d')
+                cantipro = str(len(dfg))
+                #print(cantipro)
+                st.info("Toltal tickets programado: " + " " + cantipro) 
+            ##3 tranferir
+                sql = """
+                SELECT GESTOR, codreq, FEC_PROG FROM bdtickets WHERE  ACCION="7E_NO SE UBICA CLITE" ;
+                """
+                df = pd.read_sql(sql, cnxn)
+                dfg = df[df['GESTOR'] == name]
+                #print(dfg)
+                #date = datetime.now()
+                #tcanti = (date.strftime("%Y-%m-%d"))
+            ##### cantidad de tranferir
+                #dfp = dfg
+                #dfp['FEC_PROG'] = pd.to_datetime(dfp['FEC_PROG']).dt.date
+                #dfp['FEC_PROG'] = pd.to_datetime(dfp['FEC_PROG'], format='%Y-%m-%d')
+                cantipro = str(len(dfg))
+                #print(cantipro)
+                #print("Tranferir" + " " + cantipro)
+                st.warning("Total tickest por llamar: " + " " + cantipro)
+
+                sql = """
+                SELECT * FROM bdtickets  WHERE ACCION = 'En espera' ;
+                """
+                df = pd.read_sql(sql, cnxn)
+                dfg = df[df['GESTOR'] == name]
+                #print(dfg)
+                #date = datetime.now()
+                #tcanti = (date.strftime("%Y-%m-%d"))
+            ##### cantidad de tranferir
+                #dfp = dfg
+                #dfp['FEC_PROG'] = pd.to_datetime(dfp['FEC_PROG']).dt.date
+                #dfp['FEC_PROG'] = pd.to_datetime(dfp['FEC_PROG'], format='%Y-%m-%d')
+                cantipro = str(len(dfg))
+                #print(cantipro)
+                #print("Tranferir" + " " + cantipro)
+                st.error("Total tickest En espera: " + " " + cantipro)
+
             if  genre == 'En espera':
 
                 sql = """
@@ -1177,7 +1435,7 @@ if authentication_status:
                 esperadt2 = esperadt[esperadt['GESTOR'] == name]
                 espera = esperadt2['codreq']
                 
-                print(espera)
+                #print(espera)
 
                 filtro = st.selectbox(
                     "Tickets",
@@ -1372,360 +1630,6 @@ if authentication_status:
                         st.experimental_rerun()
 
 
-            if  genre == 'Finalizar':
-
-                #TODO SIVERVPARA BARRA AZUL
-                my_bar = st.progress(0)
-                ## fecha para programar y cerrar
-                date = datetime.now()
-                tiempo = (date.strftime("%d-%m-%Y %H:%M:%S"))
-                #print(tiempo) # DD Month, YYYY HH:MM:SS
-
-                options = (df2['codreq'].unique())
-
-                add  = str('CERRAR')
-                nom = str(name)
-                adwe = (str(options)[2:-2])
-                #cursor.execute("UPDATE bdtickets SET ESTADO = ?, GESTOR = ? WHERE codreq = ?", add, nom, adwe)
-                sql = "UPDATE bdtickets SET ESTADO = %s, GESTOR = %s WHERE codreq = %s AND ESTADO='PROGRAMADO'"
-                val = (add, nom, adwe)
-                cursor.execute(sql, val)
-
-
-                options = (df['codreq'].unique())
-
-                add  = str('PROGRAMADO')
-                nom = str(name)
-                adwe = (str(options)[2:-2])
-                #st.info(dfu2)
-
-                #cursor.execute("UPDATE bdtickets SET ESTADO = ?, GESTOR = ? WHERE codreq = ?", add, nom, adwe)
-                #st.info(dfu2)
-                ### un ejemplo para texto
-                #st.info(desobsordtrab)
-                #st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,Cyan, Cyan);color:BLACK;font-size:16px;border-radius:2%;">{canti}</p>', unsafe_allow_html=True)
-                st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,Cyan, Cyan);color:BLACK;font-size:16px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
-
-
-                
-                col1, col2, col3 = st.columns(3)
-
-
-
-                with col1:
-                    st.markdown("**Numero de tickets**")
-                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfu2}</p>', unsafe_allow_html=True)
-
-                    #filter_page_or_query = st.markdown("Dimension to filter #1"), st.markdown("<P style='text-align: center; color: BLUE;'>Some title</P>", unsafe_allow_html=True)
-
-                with col2:
-                    st.markdown("**Codigo de cliente**")
-                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{codcli}</p>', unsafe_allow_html=True)
-
-                    
-
-                with col3:
-                    st.markdown("**Fecha de Ticket**")
-                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{fec_regist}</p>', unsafe_allow_html=True)
-
-
-                with col1:
-                    st.markdown("**Tecnologia**")
-                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{tiptecnologia_x}</p>', unsafe_allow_html=True)
-
-
-                with col2:
-                    st.markdown("**Telefono**")
-                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">_{numtelefvoip}</p>', unsafe_allow_html=True)
-
-
-                with col3:
-                    st.markdown("**Telf Ref**")
-                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{TELEFONO_REFERENCIA_1_CRM}</p>', unsafe_allow_html=True)
-
-
-                with col1:
-                    st.markdown("**Nodo**")
-                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{codnod}</p>', unsafe_allow_html=True)
-
-                with col2:
-                    st.markdown("**CategTier 2**")
-                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{Categorization_Tier2}</p>', unsafe_allow_html=True)
-
-                with col3:
-                    st.markdown("**Observacion**")
-                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{desmotv}</p>', unsafe_allow_html=True)
-
-                with col1:
-                    st.markdown("**Cuestomerid crm**")
-                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{CUSTOMERID_CRM__c}</p>', unsafe_allow_html=True)
-
-                with col2:
-                    st.markdown("**Area crm**")
-                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{Area_CRM}</p>', unsafe_allow_html=True)
-                
-                with col3:
-                    st.markdown("**Observacion 2**")
-                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:15px;border-radius:2%;">{desobsordtrab}</p>', unsafe_allow_html=True)
-                
-                with col1:
-                    st.write("")
-                    st.write("")
-                    st.write("")
-                    st.write("")
-                    st.write("")
-                    textogestion = "Realizar Actividades💻"
-                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,Cyan, Cyan);color:Black;font-size:22px;border-radius:2%;">{textogestion}</p>', unsafe_allow_html=True)
-                with col1:
-                    filter_type3 = st.selectbox(
-                        'How would you like to be contacted?',
-                        ('Email', 'Home phone', 'Mobile phone'),
-                        help="""
-                        Ten encuenta tu accion `Ticket` inf.
-                        """,
-                    )
-
-
-                st.write("")
-                #title = st.text_input("INGRESA TU GESTION")
-                raw_text = st.text_area("Observación", key="text")
-                #form = st.form(key='text')
-                #print(input)
-                def clear_text():
-                    st.session_state["text"] = ""
-                    
-                st.button("🗑️Limpiar ", on_click=clear_text)
-                    
-                #st.button("clear text input", on_click=clear_text)
-
-                #st.button("Inicio")
-                col1, col2, col3 , col4, col5 = st.columns(5)
-
-                with col1:
-                    pass
-                with col2:
-                    pass
-                with col4:
-                    pass
-                with col5:
-                    pass
-                with col3 :
-                    
-                    if st.button("😮‍💨Fin"):
-                        #def __init__(self):
-                        #    st.experimental_rerun()
-
-                        sql1 = "UPDATE bdtickets SET ACCION = %s, OBS = %s, FEC_CERRAR = %s WHERE codreq = %s AND ACTIVO = '1' "
-                        #sql1 = "INSERT INTO gestionacc (codreq, ACCION) VALUES (%s, %s)"
-                        val1 = (filter_type3,raw_text,tiempo ,dfu2)
-                        cursor.execute(sql1, val1)
-                        cnxn.commit()
-
-                        sql1 = "UPDATE bdtickets SET ESTADO = %s,GESTOR = '', FEC_PROG = '',ACTIVO = '0', LLAMADA = '0',ACCION ='' WHERE GESTOR = %s AND ACCION = '7E_NO SE UBICA CLITE'"
-                        #sql1 = "INSERT INTO gestionacc (codreq, ACCION) VALUES (%s, %s)"
-                        val1 = ('PENDIENTE', name)
-                        cursor.execute(sql1, val1)
-                        cnxn.commit()
-
-                        #cursor.close()
-                        #cnxn.close()
-                            ###TODO IMPORTANTE ES PARA REFRESCAR LA PAGINA
-                            #st.experimental_rerun()
-                            #st.legacy_caching.clear_cache()
-                            #st.legacy_caching.clear_cache()
-                        #import pyautogui
-                        #pyautogui.hotkey("ctrl","F5")
-                        #st.experimental_singleton.clear()
-                        st.experimental_rerun()
-
-
-            xs = ['Cardenas', 'LLLERENAL', 'Hinostroza', 'Argomedo', 'VIERA']
-            bs = (username in xs)
-            if  genre == 'Dashboard':
-                if bs == True:
-                #if  'Cardenas' == username:      #
-                    st.markdown("""
-                        <iframe title="Gastion19" width="1140" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=0c6caef7-27cf-4548-849c-1970f2d9b0bf&autoAuth=true&ctid=9744600e-3e04-492e-baa1-25ec245c6f10" frameborder="0" allowFullScreen="true"></iframe>
-                    """, unsafe_allow_html=True)
-
-                    # st.experimental_rerun()
-                    ## fondo total
-                    def add_bg_from_url():
-                        st.markdown(
-                            f"""
-                            <style>
-                            .stApp {{
-                                background-image: url("https://cdn.pixabay.com/photo/2015/04/23/21/59/hot-air-balloon-736879_960_720.jpg 1x, https://cdn.pixabay.com/photo/2015/04/23/21/59/hot-air-balloon-736879_1280.jpg");
-                                background-attachment: fixed;
-                                background-size: cover
-                            }}
-                            </style>
-                            """,
-                            unsafe_allow_html=True
-                        )
-                    add_bg_from_url() 
-                    
-            if  genre == 'Analisis':
-                st.text("Cuadro de gestion individual!!!") 
-
-                st.success("Total tickets cerradas: " + " " + canti) 
-                ### programado
-                sql = """
-                SELECT GESTOR, codreq, FEC_PROG FROM bdtickets WHERE  ESTADO="PROGRAMADO" ;
-                """
-                df = pd.read_sql(sql, cnxn)
-                dfg = df[df['GESTOR'] == name]
-                print(dfg)
-                #date = datetime.now()
-                #tcanti = (date.strftime("%Y-%m-%d"))
-            ##### cantidad de programadas
-                #dfp = dfg
-                #dfp['FEC_PROG'] = pd.to_datetime(dfp['FEC_PROG']).dt.date
-                #dfp['FEC_PROG'] = pd.to_datetime(dfp['FEC_PROG'], format='%Y-%m-%d')
-                cantipro = str(len(dfg))
-                print(cantipro)
-                st.info("Toltal tickets programado: " + " " + cantipro) 
-            ##3 tranferir
-                sql = """
-                SELECT GESTOR, codreq, FEC_PROG FROM bdtickets WHERE  ACCION="7E_NO SE UBICA CLITE" ;
-                """
-                df = pd.read_sql(sql, cnxn)
-                dfg = df[df['GESTOR'] == name]
-                print(dfg)
-                #date = datetime.now()
-                #tcanti = (date.strftime("%Y-%m-%d"))
-            ##### cantidad de tranferir
-                #dfp = dfg
-                #dfp['FEC_PROG'] = pd.to_datetime(dfp['FEC_PROG']).dt.date
-                #dfp['FEC_PROG'] = pd.to_datetime(dfp['FEC_PROG'], format='%Y-%m-%d')
-                cantipro = str(len(dfg))
-                print(cantipro)
-                #print("Tranferir" + " " + cantipro)
-                st.warning("Total tickest por llamar: " + " " + cantipro)
-
-
-            if  genre == 'Mensaje':
-                #TODO SIVERVPARA BARRA AZUL
-                my_bar = st.progress(0)
-                celu = st.text_input('Numero')
-                print(celu)
-
-                #title = st.text_input("INGRESA TU GESTION")
-                mensaje = st.text_area("Observación", key="text")
-                #form = st.form(key='text')
-                #print(input)
-                def clear_text():
-                    st.session_state["text"] = ""
-                    
-                st.button("🗑️Limpiar ", on_click=clear_text)
-
-                import glob
-                import os
-                import time
-
-                import streamlit as st
-                from selenium import webdriver
-                from selenium.webdriver.chrome.options import Options
-                from selenium.webdriver.support.wait import WebDriverWait
-                from selenium.webdriver.common.by import By
-
-                options = Options()
-                options.add_argument("--headless")
-                options.add_argument("--no-sandbox")
-                options.add_argument("--disable-dev-shm-usage")
-                options.add_argument("--disable-gpu")
-                options.add_argument("--disable-features=NetworkService")
-                options.add_argument("--window-size=1920x1080")
-                options.add_argument("--disable-features=VizDisplayCompositor")
-
-
-                def delete_selenium_log():
-                    if os.path.exists('selenium.log'):
-                        os.remove('selenium.log')
-
-
-                def show_selenium_log():
-                    if os.path.exists('selenium.log'):
-                        with open('selenium.log') as f:
-                            content = f.read()
-                            st.code(content)
-
-
-                # not required anymore:
-                # def get_chromedriver_path():
-                #     results = glob.glob('/**/chromedriver', recursive=True)  # workaround on streamlit sharing
-                #     return results[0]
-                #st.button("Inicio")
-                col1, col2, col3 , col4, col5 = st.columns(5)
-
-                with col1:
-                    pass
-                with col2:
-                    pass
-                with col4:
-                    pass
-                with col5:
-                    pass
-                with col3 :
-                    st.balloons()
-                    if st.button("✉️Enviar"):
-
-                        with webdriver.Chrome(options=options, service_log_path='selenium.log') as driver:
-
-
-                            username = 'caramburu_TDP'
-                            passwordd = 'WebSys29*T*'
-
-
-                            driver.get("https://auth.movistaradvertising.com/login?logout")
-                            time.sleep(1)
-
-                            xpath = driver.find_element_by_xpath('//INPUT[@id="username"]')
-                            xpath.send_keys(username)
-                            time.sleep(2)
-
-                            xpath = driver.find_element_by_xpath('//INPUT[@id="password"]')
-                            xpath.send_keys(passwordd)
-                            time.sleep(2)
-
-                            xpath = driver.find_element_by_xpath('//BUTTON[@type="submit"][text()="Ingresar"]')
-                            xpath.click()
-                            time.sleep(2)
-
-
-                            xpath = driver.find_element_by_xpath('//*[@id="dropdown-user-menu"]/div/button[1]')
-                            xpath.click()
-                            time.sleep(2)
-
-                            xpath = driver.find_element_by_xpath('//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
-                            xpath.click()
-                            time.sleep(3)
-
-                            #FIXME aqui demora
-                            xpath = driver.find_element_by_xpath('//INPUT[@id="inputGsmList"]')
-                            xpath.send_keys(celu)
-                            time.sleep(3)
-
-                            xpath = driver.find_element_by_xpath('//TEXTAREA[@id="txtMessage"]')
-                            xpath.send_keys(mensaje)
-                            time.sleep(3)
-
-
-                            xpath = driver.find_element_by_xpath('//BUTTON[@id="buttonProcess"]')
-                            xpath.click()
-                            time.sleep(2)
-
-                            xpath = driver.find_element_by_xpath('//*[@id="buttonSend"]')
-                            xpath.click()
-                            time.sleep(2)
-
-                            driver.quit()
-                            st.balloons()
-
-
-                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">Mensaje enviado</p>', unsafe_allow_html=True)
-
-
         except Error as e:
             print('디비 관련 에러 발생', e)
         
@@ -1888,16 +1792,21 @@ if authentication_status:
         )
     add_bg_from_url()
 
-
-
-    def hide_anchor_link():
-        st.markdown("""
+    #### fondo al costado
+    def sidebar_bg(side_bg):
+        side_bg_ext = 'jpg'
+        st.markdown(
+            f"""
             <style>
-            .css-15zrgzn {display: none}
-            .css-eczf16 {display: none}
-            .css-jn99sy {display: none}
+            [data-testid="stSidebar"] > div:first-child {{
+                background: url(data:image/{side_bg_ext};base64,{base64.b64encode(open(side_bg, "rb").read()).decode()});
+            }}
             </style>
-            """, unsafe_allow_html=True)
+            """,
+            unsafe_allow_html=True,
+            )
+        side_bg = 'nooa.jpg'
+        sidebar_bg(side_bg)
 
 
     if selected == "Contact":
