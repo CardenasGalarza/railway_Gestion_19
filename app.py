@@ -22,7 +22,7 @@ from datetime import datetime
 from datetime import timedelta
 import gspread
 import re
-import pyautogui
+#import pyautogui
 
 
 st.set_page_config(page_title='bdtickets-Averias', page_icon="🌀", layout='centered', initial_sidebar_state='auto')
@@ -910,7 +910,7 @@ if authentication_status:
                         time.sleep(2)
                         st.balloons()
 
-                        pyautogui.hotkey("ctrl","F5")
+                        #pyautogui.hotkey("ctrl","F5")
 
                         
 
