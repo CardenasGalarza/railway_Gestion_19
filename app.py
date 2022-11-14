@@ -1763,7 +1763,7 @@ if authentication_status:
                     #    print("FEC_CERRAR = ", row[2])
                     #dfg = gian[gian['GESTOR'] == 'Giancarlos Cardenas']
 
-                    desmotv =gian["FEC_CERRAR"]
+                    desmotv =gian["GESTOR"]
                     dfunom = (desmotv.to_string(index=False))
                     #print(dfunom)
 
