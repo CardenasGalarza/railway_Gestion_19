@@ -213,7 +213,7 @@ if authentication_status:
             with st.sidebar:
                 selected = option_menu(
                     menu_title="Main Menu",  # required
-                    options=["Home", "Projects", "Contact"],  # required
+                    options=["CargarDt", "Projects", "Contact"],  # required
                     icons=["house", "book", "envelope"],  # optional
                     menu_icon="cast",  # optional
                     default_index=0,  # optional
@@ -224,7 +224,7 @@ if authentication_status:
             # 2. horizontal menu w/o custom style
             selected = option_menu(
                 menu_title=None,  # required
-                options=["Home", "Projects", "Contact"],  # required
+                options=["CargarDt", "Projects", "Contact"],  # required
                 icons=["house", "book", "envelope"],  # optional
                 menu_icon="cast",  # optional
                 default_index=0,  # optional
@@ -236,7 +236,7 @@ if authentication_status:
             # 2. horizontal menu with custom style
             selected = option_menu(
                 menu_title=None,  # required
-                options=["Home", "Projects", "Contact"],  # required
+                options=["CargarDt", "Projects", "Contact"],  # required
                 icons=["house", "book", "envelope"],  # optional
                 menu_icon="cast",  # optional
                 default_index=0,  # optional
@@ -257,7 +257,7 @@ if authentication_status:
 
     selected = streamlit_menu(example=EXAMPLE_NO)
 
-    if selected == "Home":
+    if selected == "CargarDt":
         #st.title(f"You have selected {selected}")
         st.title("GESTION TICKETS PENDIENTES💻")
 
@@ -771,193 +771,9 @@ if authentication_status:
 
             genre = st.radio(
                 "Establece tu preferencia de actividad",
-                ('Programar', 'En espera','Finalizar', 'Analisis', 'Dashboard', 'Mensaje'))
-
-            if  genre == 'Mensaje':
-
-                import streamlit as st
-                import streamlit as st
-                from streamlit_option_menu import option_menu
-                import pickle
-                from pathlib import Path
-                import pandas as pd
-                import numpy as np
-                #from soupsieve import select  # pip install pandas openpyxl
-                import streamlit_authenticator as stauth  # pip install streamlit-authenticator
-                ############################################ OCULTAR INFROMACION NO IMPORTANTE
-                import base64
-                import mysql.connector
-                from mysql.connector import Error
-                #import pyodbc
-                import streamlit as st
-                ############################################ OCULTAR INFROMACION NO IMPORTANTE
-                import warnings
-                warnings.filterwarnings('ignore')
-                #########################################3333
-                ##########################
-                import time
-                from datetime import datetime
-                from datetime import timedelta
-                import gspread
-                import re
+                ('Programar', 'En espera','Finalizar', 'Analisis', 'Dashboard'))
 
 
-                with st.form("my_form"):
-
-                    col1, col2, col3 , col4, col5 = st.columns(5)
-
-                    with col1:
-                        pass
-                    with col2:
-                        pass
-                    with col4:
-                        pass
-                    with col1:
-                        celu = st.text_input('Numero')
-                    filter_type8 = st.selectbox(
-                        "Mensaje",
-                        (
-                            "Gracias por llamar a mi empresa",
-                            "Has llegado a mi empresa. Tu llamada es importante para nosotros",
-                            "7C_TEMA COMERCIALES",
-                            "7D_GENERA NUEVO REQ",
-                            #"7E_NO SE UBICA CLITE",
-                            "7F_REQ MAL GENERADO",
-                            "Requiere Visita Tecnica",
-                            "En espera",
-                        ),
-                        key="filter_type8",
-                        help="""
-                        Ten encuenta tu accion `Ticket` inf.
-                        """,
-                    )
-
-
-                    #TODO SIVERVPARA BARRA AZUL
-                    #celu = '925266696'
-                    #print(celu)
-
-                    #title = st.text_input("INGRESA TU GESTION")
-                    mensaje = filter_type8
-
-
-
-                    # Every form must have a submit button.
-                    submitted = st.form_submit_button("Submit")
-
-                    if submitted == True:
-                        import streamlit as st
-                        import glob
-                        import os
-                        import time
-
-                        import streamlit as st
-                        from selenium import webdriver
-                        from selenium.webdriver.chrome.options import Options
-                        from selenium.webdriver.support.wait import WebDriverWait
-                        from selenium.webdriver.common.by import By
-
-                        options = Options()
-                        options.add_argument("--headless")
-                        options.add_argument("--no-sandbox")
-                        options.add_argument("--disable-dev-shm-usage")
-                        options.add_argument("--disable-gpu")
-                        options.add_argument("--disable-features=NetworkService")
-                        options.add_argument("--window-size=1920x1080")
-                        options.add_argument("--disable-features=VizDisplayCompositor")
-
-                        
-
-                        def delete_selenium_log():
-                            if os.path.exists('selenium.log'):
-                                os.remove('selenium.log')
-
-
-                        def show_selenium_log():
-                            if os.path.exists('selenium.log'):
-                                with open('selenium.log') as f:
-                                    content = f.read()
-                                    st.code(content)
-
-
-                        # not required anymore:
-                        # def get_chromedriver_path():
-                        #     results = glob.glob('/**/chromedriver', recursive=True)  # workaround on streamlit sharing
-                        #     return results[0]
-                        #st.button("Inicio")
-                        col1, col2, col3 , col4, col5 = st.columns(5)
-
-                        with col1:
-                            pass
-                        with col2:
-                            pass
-                        with col4:
-                            pass
-                        with col1:
-                            pass
-                        with col5 :
-                            st.balloons()
-
-                        
-
-                        driver = webdriver.Chrome(options=options, service_log_path='selenium.log')
-
-                        username = 'caramburu_TDP'
-                        passwordd = 'WebSys29*T*'
-                        driver.get("https://auth.movistaradvertising.com/login?logout")
-                        time.sleep(1)
-
-                        st.success('listoooooooo')
-                        time.sleep(2)
-                        st.balloons()
-
-                        #pyautogui.hotkey("ctrl","F5")
-
-                        
-
-                        xpath = driver.find_element("xpath", '//INPUT[@id="username"]')
-                        xpath.send_keys(username)
-                        time.sleep(2)
-
-                        xpath = driver.find_element("xpath", '//INPUT[@id="password"]')
-                        xpath.send_keys(passwordd)
-                        time.sleep(2)
-
-
-                        xpath = driver.find_element("xpath", '//BUTTON[@type="submit"][text()="Ingresar"]')
-                        xpath.click()
-                        time.sleep(3)
-
-
-                        xpath = driver.find_element("xpath", '//*[@id="dropdown-user-menu"]/div/button[2]')
-                        xpath.click()
-                        time.sleep(7)
-
-                        xpath = driver.find_element("xpath", '//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
-                        xpath.click()
-                        time.sleep(6)
-
-                        #celu = '925266696'
-                        #mensaje = 'Listoooossdddssss'
-
-                        xpath = driver.find_element("xpath", '//INPUT[@id="inputGsmList"]')
-                        xpath.send_keys(celu)
-                        time.sleep(6)
-
-                        xpath = driver.find_element("xpath", '//TEXTAREA[@id="txtMessage"]')
-                        xpath.send_keys(mensaje)
-                        time.sleep(6)
-
-
-                        xpath = driver.find_element("xpath", '//BUTTON[@id="buttonProcess"]')
-                        xpath.click()
-                        time.sleep(5)
-
-                        xpath = driver.find_element("xpath", '//*[@id="buttonSend"]')
-                        xpath.click()
-                        time.sleep(5)
-
-                        driver.quit()
 
             if  genre == 'Programar':
                 #TODO SIVERVPARA BARRA AZUL
@@ -1129,158 +945,10 @@ if authentication_status:
                     st.session_state["text"] = ""
                     
                 st.button("🗑️Limpiar ", on_click=clear_text)
+                    
+                #st.button("clear text input", on_click=clear_text)
 
-######################################
-######################################
-                col1, col2, col3 , col4, col5 = st.columns(5)
-
-                with col1:
-                    pass
-                with col2:
-                    pass
-                with col4:
-                    pass
-                with col1:
-                    celu = st.text_input('Numero')
-                filter_type8 = st.selectbox(
-                    "Mensaje",
-                    (
-                        f"Gracias por llamar a mi empresa {dfunom}",
-                        "Has llegado a mi empresa. Tu llamada es importante para nosotros",
-                        "7C_TEMA COMERCIALES",
-                        "7D_GENERA NUEVO REQ",
-                        #"7E_NO SE UBICA CLITE",
-                        "7F_REQ MAL GENERADO",
-                        "Requiere Visita Tecnica",
-                        "En espera",
-                    ),
-                    key="filter_type8",
-                    help="""
-                    Ten encuenta tu accion `Ticket` inf.
-                    """,
-                )
-                try:
-
-                    #TODO SIVERVPARA BARRA AZUL
-                    #celu = '925266696'
-                    #print(celu)
-
-                    #title = st.text_input("INGRESA TU GESTION")
-                    mensaje = filter_type8
-
-
-                    import glob
-                    import os
-                    import time
-
-                    import streamlit as st
-                    from selenium import webdriver
-                    from selenium.webdriver.chrome.options import Options
-                    from selenium.webdriver.support.wait import WebDriverWait
-                    from selenium.webdriver.common.by import By
-
-                    options = Options()
-                    options.add_argument("--headless")
-                    options.add_argument("--no-sandbox")
-                    options.add_argument("--disable-dev-shm-usage")
-                    options.add_argument("--disable-gpu")
-                    options.add_argument("--disable-features=NetworkService")
-                    options.add_argument("--window-size=1920x1080")
-                    options.add_argument("--disable-features=VizDisplayCompositor")
-
-
-                    def delete_selenium_log():
-                        if os.path.exists('selenium.log'):
-                            os.remove('selenium.log')
-
-
-                    def show_selenium_log():
-                        if os.path.exists('selenium.log'):
-                            with open('selenium.log') as f:
-                                content = f.read()
-                                st.code(content)
-
-
-                    # not required anymore:
-                    # def get_chromedriver_path():
-                    #     results = glob.glob('/**/chromedriver', recursive=True)  # workaround on streamlit sharing
-                    #     return results[0]
-                    #st.button("Inicio")
-                    col1, col2, col3 , col4, col5 = st.columns(5)
-
-                    with col1:
-                        pass
-                    with col2:
-                        pass
-                    with col4:
-                        pass
-                    with col1:
-                        pass
-                    with col5 :
-                        st.balloons()
-                        if st.button("✉️Enviar"):
-
-                            with webdriver.Chrome(options=options, service_log_path='selenium.log') as driver:
-
-
-                                username = 'caramburu_TDP'
-                                passwordd = 'WebSys29*T*'
-
-
-                                driver.get("https://auth.movistaradvertising.com/login?logout")
-                                time.sleep(1)
-
-                                xpath = driver.find_element_by_xpath('//INPUT[@id="username"]')
-                                xpath.send_keys(username)
-                                time.sleep(2)
-
-                                xpath = driver.find_element_by_xpath('//INPUT[@id="password"]')
-                                xpath.send_keys(passwordd)
-                                time.sleep(2)
-
-                                xpath = driver.find_element_by_xpath('//BUTTON[@type="submit"][text()="Ingresar"]')
-                                xpath.click()
-                                time.sleep(2)
-
-
-                                xpath = driver.find_element_by_xpath('//*[@id="dropdown-user-menu"]/div/button[1]')
-                                xpath.click()
-                                time.sleep(2)
-
-                                xpath = driver.find_element_by_xpath('//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
-                                xpath.click()
-                                time.sleep(4)
-
-                                #FIXME aqui demora
-                                xpath = driver.find_element_by_xpath('//INPUT[@id="inputGsmList"]')
-                                xpath.send_keys(celu)
-                                time.sleep(3)
-
-                                xpath = driver.find_element_by_xpath('//TEXTAREA[@id="txtMessage"]')
-                                xpath.send_keys(mensaje)
-                                time.sleep(3)
-
-
-                                xpath = driver.find_element_by_xpath('//BUTTON[@id="buttonProcess"]')
-                                xpath.click()
-                                time.sleep(2)
-
-                                xpath = driver.find_element_by_xpath('//*[@id="buttonSend"]')
-                                xpath.click()
-                                time.sleep(2)
-
-                                driver.quit()
-                                st.balloons()
-                                st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">Mensaje enviado</p>', unsafe_allow_html=True)
-
-
-
-
-                except Error as e:
-                    print('Gian', e)
-
-###################3
-####################
+                #st.button("Inicio")
                 col1, col2, col3 , col4, col5 = st.columns(5)
 
                 with col1:
@@ -1996,10 +1664,332 @@ if authentication_status:
         side_bg = 'nooa.jpg'
         sidebar_bg(side_bg)
 
-
     if selected == "Contact":
         #st.title(f"You have selected {selected}")
-        st.title(f"Hola {name} estamos en proceso de esta opcion...😮‍💨👨🏻‍💻")
+        #st.title(f"Hola {name} estamos en proceso de esta opcion...😮‍💨👨🏻‍💻")
+
+        st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,white, white);color:navy;font-size:24px;border-radius:2%;"><b>ENVIAR MENSAJE GESTION</b></p>', unsafe_allow_html=True)
+
+
+        with st.form(key='my_form', clear_on_submit=True):
+
+                import streamlit as st
+                import streamlit as st
+                from streamlit_option_menu import option_menu
+                import pickle
+                from pathlib import Path
+                import pandas as pd
+                import numpy as np
+                #from soupsieve import select  # pip install pandas openpyxl
+                import streamlit_authenticator as stauth  # pip install streamlit-authenticator
+                ############################################ OCULTAR INFROMACION NO IMPORTANTE
+                import base64
+                import mysql.connector
+                from mysql.connector import Error
+                #import pyodbc
+                import streamlit as st
+                ############################################ OCULTAR INFROMACION NO IMPORTANTE
+                import warnings
+                warnings.filterwarnings('ignore')
+                #########################################3333
+                ##########################
+                import time
+                from datetime import datetime
+                from datetime import timedelta
+                import gspread
+                import re
+
+
+                col1, col2, col3 = st.columns(3)
+
+                with col1:
+                    tick = st.text_input('Tickets')
+                with col2:
+                    celu = st.text_input('Numero')
+
+                    
+
+                mensaje = st.selectbox(
+                    "Mensaje",
+                    (
+                        "SMS1",
+                        "SMS2",
+                    ),
+                    key="filter_type8",
+                    help="""
+                    Ten encuenta tu accion `Ticket` inf.
+                    """,
+                )
+
+
+                #TODO SIVERVPARA BARRA AZUL
+                #celu = '925266696'
+                #print(celu)
+
+                st.balloons()
+            # Every form must have a submit button.
+
+                submitted = st.form_submit_button("✉️Enviar")
+
+
+                if submitted == True:
+
+                    cnxn = mysql.connector.connect( host="us-cdbr-east-06.cleardb.net",
+                                                    port="3306",
+                                                    user="b550dc65be0b71",
+                                                    passwd="a3fa9457",
+                                                    db="heroku_af31a2d889c5388"
+                                                    )
+                    cursor = cnxn.cursor()
+
+
+                    #cursor.execute("UPDATE bdtickets SET ESTADO = ?, GESTOR = ? WHERE codreq = ?", add, nom, adwe)
+                    sql = """
+                    SELECT codreq, FEC_CERRAR, GESTOR FROM bdtickets WHERE codreq = %s ;
+                    """
+                    ##TODO SIEMPRE PONER LA COMA
+                    cursor.execute(sql, (tick,))
+                    # fetch result
+                    record = cursor.fetchall()
+                    #print(record)
+                    cursor.close()
+                    cnxn.close()
+
+                    gian = pd.DataFrame(record)
+                    gian.columns = ['codreq', 'FEC_CERRAR', 'GESTOR']
+                    #for row in record:
+                    #    print("GESTOR = ", row[0], )
+                    #    print("codreq = ", row[1])
+                    #    print("FEC_CERRAR = ", row[2])
+                    #dfg = gian[gian['GESTOR'] == 'Giancarlos Cardenas']
+
+                    desmotv =gian["FEC_CERRAR"]
+                    dfunom = (desmotv.to_string(index=False))
+                    #print(dfunom)
+
+                    import streamlit as st
+                    import glob
+                    import os
+                    import time
+
+                    import streamlit as st
+                    from selenium import webdriver
+                    from selenium.webdriver.chrome.options import Options
+                    from selenium.webdriver.support.wait import WebDriverWait
+                    from selenium.webdriver.common.by import By
+
+                    options = Options()
+                    #options.add_argument("--headless")
+                    options.add_argument("--no-sandbox")
+                    options.add_argument("--disable-dev-shm-usage")
+                    options.add_argument("--disable-gpu")
+                    options.add_argument("--disable-features=NetworkService")
+                    options.add_argument("--window-size=1920x1080")
+                    options.add_argument("--disable-features=VizDisplayCompositor")
+
+                    
+
+                    def delete_selenium_log():
+                        if os.path.exists('selenium.log'):
+                            os.remove('selenium.log')
+
+
+                    def show_selenium_log():
+                        if os.path.exists('selenium.log'):
+                            with open('selenium.log') as f:
+                                content = f.read()
+                                st.code(content)
+
+
+                    # not required anymore:
+                    # def get_chromedriver_path():
+                    #     results = glob.glob('/**/chromedriver', recursive=True)  # workaround on streamlit sharing
+                    #     return results[0]
+                    #st.button("Inicio")
+
+                    st.balloons()
+
+                    
+
+                    driver = webdriver.Chrome(options=options, service_log_path='selenium.log')
+
+                    username = 'caramburu_TDP'
+                    passwordd = 'WebSys29*T*'
+                    driver.get("https://auth.movistaradvertising.com/login?logout")
+                    time.sleep(1)
+
+                    #pyautogui.hotkey("ctrl","F5")
+
+                    
+
+                    xpath = driver.find_element("xpath", '//INPUT[@id="username"]')
+                    xpath.send_keys(username)
+                    time.sleep(2)
+
+                    xpath = driver.find_element("xpath", '//INPUT[@id="password"]')
+                    xpath.send_keys(passwordd)
+                    time.sleep(2)
+
+
+                    xpath = driver.find_element("xpath", '//BUTTON[@type="submit"][text()="Ingresar"]')
+                    xpath.click()
+                    time.sleep(3)
+
+
+                    xpath = driver.find_element("xpath", '//*[@id="dropdown-user-menu"]/div/button[2]')
+                    xpath.click()
+                    time.sleep(4)
+
+                    xpath = driver.find_element("xpath", '//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
+                    xpath.click()
+                    time.sleep(4)
+
+                    #celu = '925266696'
+                    #mensaje = 'Listoooossdddssss'
+
+                    xpath = driver.find_element("xpath", '//INPUT[@id="inputGsmList"]')
+                    xpath.send_keys(celu)
+                    time.sleep(6)
+
+                    if 'SMS1' == mensaje:
+
+                        xpath = driver.find_element("xpath", '//TEXTAREA[@id="txtMessage"]')
+                        xpath.send_keys("MENSAJE 1" + " " + dfunom)
+                        time.sleep(6)
+
+
+                        xpath = driver.find_element("xpath", '//BUTTON[@id="buttonProcess"]')
+                        xpath.click()
+                        time.sleep(6)
+
+                        xpath = driver.find_element("xpath", '//*[@id="buttonSend"]')
+                        xpath.click()
+                        time.sleep(5)
+
+                        driver.quit()
+
+                        st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,Cyan, Cyan);color:BLACK;font-size:16px;border-radius:2%;">Mensaje enviado</p>', unsafe_allow_html=True)
+                        #st.success('Mensaje enviado')
+                        st.balloons()
+                        #st.experimental_rerun()
+
+                        col1, col2, col3 = st.columns(3)
+
+                        with col1:
+                            st.markdown("**Numero de tickets**")
+                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+
+                    
+
+                        with col2:
+                            st.markdown("**Numero de tickets**")
+                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+
+                    
+
+                        with col3:
+                            st.markdown("**Numero de tickets**")
+                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+
+                    
+                    if 'SMS2' == mensaje:
+
+
+                        xpath = driver.find_element("xpath", '//TEXTAREA[@id="txtMessage"]')
+                        xpath.send_keys("MENSAJE 2" + " " + dfunom)
+                        time.sleep(6)
+
+
+                        xpath = driver.find_element("xpath", '//BUTTON[@id="buttonProcess"]')
+                        xpath.click()
+                        time.sleep(6)
+
+                        xpath = driver.find_element("xpath", '//*[@id="buttonSend"]')
+                        xpath.click()
+                        time.sleep(5)
+
+                        driver.quit()
+
+                        st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,Cyan, Cyan);color:BLACK;font-size:16px;border-radius:2%;">Mensaje enviado</p>', unsafe_allow_html=True)
+
+                        #st.success('Mensaje enviado')
+                        st.balloons()
+                        #st.experimental_rerun()
+                        col1, col2, col3 = st.columns(3)
+
+                        with col1:
+                            st.markdown("**Numero de tickets**")
+                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+
+                    
+
+                        with col2:
+                            st.markdown("**Numero de tickets**")
+                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+
+                    
+
+                        with col3:
+                            st.markdown("**Numero de tickets**")
+                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+
+
+
+
+
+                st.sidebar.markdown('')
+                st.sidebar.markdown('')
+                st.sidebar.markdown('')
+                st.sidebar.markdown('')
+                st.sidebar.markdown('')
+                st.sidebar.markdown('')
+                st.sidebar.markdown('')
+                st.sidebar.markdown('')
+                st.sidebar.markdown('')
+                st.sidebar.markdown('')
+                st.sidebar.markdown('')
+                st.sidebar.markdown('')
+                st.sidebar.markdown('')
+                st.sidebar.markdown('')
+                st.sidebar.markdown('')
+                st.sidebar.markdown('')
+
+                st.sidebar.markdown(
+                '<p class="big-font"; style="text-align:center;color:Lime;font-size:16px;border-radius:2%;">©👨🏻‍💻Giancarlos .C</p>', unsafe_allow_html=True
+                )
+                ## fondo total
+                def add_bg_from_url():
+                    st.markdown(
+                        f"""
+                        <style>
+                        .stApp {{
+                            background-image: url("https://cdn.pixabay.com/photo/2018/11/13/18/06/mail-3813618_960_720.jpg 1x, https://cdn.pixabay.com/photo/2018/11/13/18/06/mail-3813618_1280.jpg");
+                            background-attachment: fixed;
+                            background-size: cover
+                        }}
+                        </style>
+                        """,
+                        unsafe_allow_html=True
+                    )
+                add_bg_from_url()
+
+        ## fondo total
+        def add_bg_from_url():
+            st.markdown(
+                f"""
+                <style>
+                .stApp {{
+                    background-image: url("https://cdn.pixabay.com/photo/2018/11/13/18/06/mail-3813618_960_720.jpg 1x, https://cdn.pixabay.com/photo/2018/11/13/18/06/mail-3813618_1280.jpg");
+                    background-attachment: fixed;
+                    background-size: cover
+                }}
+                </style>
+                """,
+                unsafe_allow_html=True
+            )
+        add_bg_from_url()
+
+
 
     ## borrar nombres de la pagina
     hide_streamlit_style = """
