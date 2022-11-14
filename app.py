@@ -1008,6 +1008,7 @@ if authentication_status:
                                 #import pyautogui
                                 #pyautogui.hotkey("ctrl","F5")
                                 #st.experimental_singleton.clear()
+                                st.balloons()
                                 time.sleep(0.75)
                                 st.experimental_rerun()
 
@@ -1800,7 +1801,7 @@ if authentication_status:
                             from selenium.webdriver.common.by import By
 
                             options = Options()
-                            options.add_argument("--headless")
+                            #options.add_argument("--headless")
                             options.add_argument("--no-sandbox")
                             options.add_argument("--disable-dev-shm-usage")
                             options.add_argument("--disable-gpu")
@@ -1859,7 +1860,7 @@ if authentication_status:
 
                             xpath = driver.find_element("xpath", '//*[@id="dropdown-user-menu"]/div/button[2]')
                             xpath.click()
-                            time.sleep(4)
+                            time.sleep(6)
 
                             xpath = driver.find_element("xpath", '//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
                             xpath.click()
