@@ -1734,204 +1734,206 @@ if authentication_status:
 
                 if submitted == True:
 
-                    cnxn = mysql.connector.connect( host="us-cdbr-east-06.cleardb.net",
-                                                    port="3306",
-                                                    user="b550dc65be0b71",
-                                                    passwd="a3fa9457",
-                                                    db="heroku_af31a2d889c5388"
-                                                    )
-                    cursor = cnxn.cursor()
+                    with st.spinner('Enviado mensaje...'):
+
+                        cnxn = mysql.connector.connect( host="us-cdbr-east-06.cleardb.net",
+                                                        port="3306",
+                                                        user="b550dc65be0b71",
+                                                        passwd="a3fa9457",
+                                                        db="heroku_af31a2d889c5388"
+                                                        )
+                        cursor = cnxn.cursor()
 
 
-                    #cursor.execute("UPDATE bdtickets SET ESTADO = ?, GESTOR = ? WHERE codreq = ?", add, nom, adwe)
-                    sql = """
-                    SELECT codreq, FEC_CERRAR, GESTOR FROM bdtickets WHERE codreq = %s ;
-                    """
-                    ##TODO SIEMPRE PONER LA COMA
-                    cursor.execute(sql, (tick,))
-                    # fetch result
-                    record = cursor.fetchall()
-                    #print(record)
-                    cursor.close()
-                    cnxn.close()
+                        #cursor.execute("UPDATE bdtickets SET ESTADO = ?, GESTOR = ? WHERE codreq = ?", add, nom, adwe)
+                        sql = """
+                        SELECT codreq, FEC_CERRAR, GESTOR FROM bdtickets WHERE codreq = %s ;
+                        """
+                        ##TODO SIEMPRE PONER LA COMA
+                        cursor.execute(sql, (tick,))
+                        # fetch result
+                        record = cursor.fetchall()
+                        #print(record)
+                        cursor.close()
+                        cnxn.close()
 
-                    gian = pd.DataFrame(record)
-                    gian.columns = ['codreq', 'FEC_CERRAR', 'GESTOR']
-                    #for row in record:
-                    #    print("GESTOR = ", row[0], )
-                    #    print("codreq = ", row[1])
-                    #    print("FEC_CERRAR = ", row[2])
-                    #dfg = gian[gian['GESTOR'] == 'Giancarlos Cardenas']
+                        gian = pd.DataFrame(record)
+                        gian.columns = ['codreq', 'FEC_CERRAR', 'GESTOR']
+                        #for row in record:
+                        #    print("GESTOR = ", row[0], )
+                        #    print("codreq = ", row[1])
+                        #    print("FEC_CERRAR = ", row[2])
+                        #dfg = gian[gian['GESTOR'] == 'Giancarlos Cardenas']
 
-                    desmotv =gian["GESTOR"]
-                    dfunom = (desmotv.to_string(index=False))
-                    #print(dfunom)
+                        desmotv =gian["GESTOR"]
+                        dfunom = (desmotv.to_string(index=False))
+                        #print(dfunom)
 
-                    import streamlit as st
-                    import glob
-                    import os
-                    import time
+                        import streamlit as st
+                        import glob
+                        import os
+                        import time
 
-                    import streamlit as st
-                    from selenium import webdriver
-                    from selenium.webdriver.chrome.options import Options
-                    from selenium.webdriver.support.wait import WebDriverWait
-                    from selenium.webdriver.common.by import By
+                        import streamlit as st
+                        from selenium import webdriver
+                        from selenium.webdriver.chrome.options import Options
+                        from selenium.webdriver.support.wait import WebDriverWait
+                        from selenium.webdriver.common.by import By
 
-                    options = Options()
-                    options.add_argument("--headless")
-                    options.add_argument("--no-sandbox")
-                    options.add_argument("--disable-dev-shm-usage")
-                    options.add_argument("--disable-gpu")
-                    options.add_argument("--disable-features=NetworkService")
-                    options.add_argument("--window-size=1920x1080")
-                    options.add_argument("--disable-features=VizDisplayCompositor")
+                        options = Options()
+                        options.add_argument("--headless")
+                        options.add_argument("--no-sandbox")
+                        options.add_argument("--disable-dev-shm-usage")
+                        options.add_argument("--disable-gpu")
+                        options.add_argument("--disable-features=NetworkService")
+                        options.add_argument("--window-size=1920x1080")
+                        options.add_argument("--disable-features=VizDisplayCompositor")
 
-                    
+                        
 
-                    def delete_selenium_log():
-                        if os.path.exists('selenium.log'):
-                            os.remove('selenium.log')
-
-
-                    def show_selenium_log():
-                        if os.path.exists('selenium.log'):
-                            with open('selenium.log') as f:
-                                content = f.read()
-                                st.code(content)
+                        def delete_selenium_log():
+                            if os.path.exists('selenium.log'):
+                                os.remove('selenium.log')
 
 
-                    # not required anymore:
-                    # def get_chromedriver_path():
-                    #     results = glob.glob('/**/chromedriver', recursive=True)  # workaround on streamlit sharing
-                    #     return results[0]
-                    #st.button("Inicio")
-
-                    st.balloons()
-
-                    
-
-                    driver = webdriver.Chrome(options=options, service_log_path='selenium.log')
-
-                    username = 'caramburu_TDP'
-                    passwordd = 'WebSys29*T*'
-                    driver.get("https://auth.movistaradvertising.com/login?logout")
-                    time.sleep(1)
-
-                    #pyautogui.hotkey("ctrl","F5")
-
-                    
-
-                    xpath = driver.find_element("xpath", '//INPUT[@id="username"]')
-                    xpath.send_keys(username)
-                    time.sleep(2)
-
-                    xpath = driver.find_element("xpath", '//INPUT[@id="password"]')
-                    xpath.send_keys(passwordd)
-                    time.sleep(2)
+                        def show_selenium_log():
+                            if os.path.exists('selenium.log'):
+                                with open('selenium.log') as f:
+                                    content = f.read()
+                                    st.code(content)
 
 
-                    xpath = driver.find_element("xpath", '//BUTTON[@type="submit"][text()="Ingresar"]')
-                    xpath.click()
-                    time.sleep(3)
+                        # not required anymore:
+                        # def get_chromedriver_path():
+                        #     results = glob.glob('/**/chromedriver', recursive=True)  # workaround on streamlit sharing
+                        #     return results[0]
+                        #st.button("Inicio")
 
-
-                    xpath = driver.find_element("xpath", '//*[@id="dropdown-user-menu"]/div/button[2]')
-                    xpath.click()
-                    time.sleep(4)
-
-                    xpath = driver.find_element("xpath", '//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
-                    xpath.click()
-                    time.sleep(4)
-
-                    #celu = '925266696'
-                    #mensaje = 'Listoooossdddssss'
-
-                    xpath = driver.find_element("xpath", '//INPUT[@id="inputGsmList"]')
-                    xpath.send_keys(celu)
-                    time.sleep(6)
-
-                    if 'SMS1' == mensaje:
-
-                        xpath = driver.find_element("xpath", '//TEXTAREA[@id="txtMessage"]')
-                        xpath.send_keys("MENSAJE 1" + " " + dfunom)
-                        time.sleep(6)
-
-
-                        xpath = driver.find_element("xpath", '//BUTTON[@id="buttonProcess"]')
-                        xpath.click()
-                        time.sleep(6)
-
-                        xpath = driver.find_element("xpath", '//*[@id="buttonSend"]')
-                        xpath.click()
-                        time.sleep(5)
-
-                        driver.quit()
-
-                        st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,Cyan, Cyan);color:BLACK;font-size:16px;border-radius:2%;">Mensaje enviado</p>', unsafe_allow_html=True)
-                        #st.success('Mensaje enviado')
                         st.balloons()
-                        #st.experimental_rerun()
 
-                        col1, col2, col3 = st.columns(3)
+                        
 
-                        with col1:
-                            st.markdown("**Numero de tickets**")
-                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+                        driver = webdriver.Chrome(options=options, service_log_path='selenium.log')
 
-                    
+                        username = 'caramburu_TDP'
+                        passwordd = 'WebSys29*T*'
+                        driver.get("https://auth.movistaradvertising.com/login?logout")
+                        time.sleep(1)
 
-                        with col2:
-                            st.markdown("**Numero de tickets**")
-                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+                        #pyautogui.hotkey("ctrl","F5")
 
-                    
+                        
 
-                        with col3:
-                            st.markdown("**Numero de tickets**")
-                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+                        xpath = driver.find_element("xpath", '//INPUT[@id="username"]')
+                        xpath.send_keys(username)
+                        time.sleep(2)
 
-                    
-                    if 'SMS2' == mensaje:
+                        xpath = driver.find_element("xpath", '//INPUT[@id="password"]')
+                        xpath.send_keys(passwordd)
+                        time.sleep(2)
 
 
-                        xpath = driver.find_element("xpath", '//TEXTAREA[@id="txtMessage"]')
-                        xpath.send_keys("MENSAJE 2" + " " + dfunom)
+                        xpath = driver.find_element("xpath", '//BUTTON[@type="submit"][text()="Ingresar"]')
+                        xpath.click()
+                        time.sleep(3)
+
+
+                        xpath = driver.find_element("xpath", '//*[@id="dropdown-user-menu"]/div/button[2]')
+                        xpath.click()
+                        time.sleep(4)
+
+                        xpath = driver.find_element("xpath", '//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
+                        xpath.click()
+                        time.sleep(4)
+
+                        #celu = '925266696'
+                        #mensaje = 'Listoooossdddssss'
+
+                        xpath = driver.find_element("xpath", '//INPUT[@id="inputGsmList"]')
+                        xpath.send_keys(celu)
                         time.sleep(6)
 
+                        if 'SMS1' == mensaje:
 
-                        xpath = driver.find_element("xpath", '//BUTTON[@id="buttonProcess"]')
-                        xpath.click()
-                        time.sleep(6)
+                            xpath = driver.find_element("xpath", '//TEXTAREA[@id="txtMessage"]')
+                            xpath.send_keys("MENSAJE 1" + " " + dfunom)
+                            time.sleep(6)
 
-                        xpath = driver.find_element("xpath", '//*[@id="buttonSend"]')
-                        xpath.click()
-                        time.sleep(5)
 
-                        driver.quit()
+                            xpath = driver.find_element("xpath", '//BUTTON[@id="buttonProcess"]')
+                            xpath.click()
+                            time.sleep(6)
 
-                        st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,Cyan, Cyan);color:BLACK;font-size:16px;border-radius:2%;">Mensaje enviado</p>', unsafe_allow_html=True)
+                            xpath = driver.find_element("xpath", '//*[@id="buttonSend"]')
+                            xpath.click()
+                            time.sleep(5)
 
-                        #st.success('Mensaje enviado')
-                        st.balloons()
-                        #st.experimental_rerun()
-                        col1, col2, col3 = st.columns(3)
+                            driver.quit()
 
-                        with col1:
-                            st.markdown("**Numero de tickets**")
-                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,Cyan, Cyan);color:BLACK;font-size:16px;border-radius:2%;">Mensaje enviado</p>', unsafe_allow_html=True)
+                            #st.success('Mensaje enviado')
+                            st.balloons()
+                            #st.experimental_rerun()
 
-                    
+                            col1, col2, col3 = st.columns(3)
 
-                        with col2:
-                            st.markdown("**Numero de tickets**")
-                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+                            with col1:
+                                st.markdown("**Numero de tickets**")
+                                st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
 
-                    
+                        
 
-                        with col3:
-                            st.markdown("**Numero de tickets**")
-                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+                            with col2:
+                                st.markdown("**Numero de tickets**")
+                                st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+
+                        
+
+                            with col3:
+                                st.markdown("**Numero de tickets**")
+                                st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+
+                        
+                        if 'SMS2' == mensaje:
+
+
+                            xpath = driver.find_element("xpath", '//TEXTAREA[@id="txtMessage"]')
+                            xpath.send_keys("MENSAJE 2" + " " + dfunom)
+                            time.sleep(6)
+
+
+                            xpath = driver.find_element("xpath", '//BUTTON[@id="buttonProcess"]')
+                            xpath.click()
+                            time.sleep(6)
+
+                            xpath = driver.find_element("xpath", '//*[@id="buttonSend"]')
+                            xpath.click()
+                            time.sleep(5)
+
+                            driver.quit()
+
+                            st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,Cyan, Cyan);color:BLACK;font-size:16px;border-radius:2%;">Mensaje enviado</p>', unsafe_allow_html=True)
+
+                            #st.success('Mensaje enviado')
+                            st.balloons()
+                            #st.experimental_rerun()
+                            col1, col2, col3 = st.columns(3)
+
+                            with col1:
+                                st.markdown("**Numero de tickets**")
+                                st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+
+                        
+
+                            with col2:
+                                st.markdown("**Numero de tickets**")
+                                st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+
+                        
+
+                            with col3:
+                                st.markdown("**Numero de tickets**")
+                                st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
 
 
 
