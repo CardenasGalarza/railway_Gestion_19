@@ -1785,7 +1785,7 @@ if authentication_status:
                             #    print("FEC_CERRAR = ", row[2])
                             #dfg = gian[gian['GESTOR'] == 'Giancarlos Cardenas']
 
-                            desmotv =gian["GESTOR"]
+                            desmotv =gian["codreq"]
                             dfunom = (desmotv.to_string(index=False))
                             #print(dfunom)
 
@@ -1801,7 +1801,7 @@ if authentication_status:
                             from selenium.webdriver.common.by import By
 
                             options = Options()
-                            #options.add_argument("--headless")
+                            options.add_argument("--headless")
                             options.add_argument("--no-sandbox")
                             options.add_argument("--disable-dev-shm-usage")
                             options.add_argument("--disable-gpu")
@@ -1811,16 +1811,16 @@ if authentication_status:
 
                             
 
-                            def delete_selenium_log():
-                                if os.path.exists('selenium.log'):
-                                    os.remove('selenium.log')
+                            #def delete_selenium_log():
+                            #    if os.path.exists('selenium.log'):
+                            #        os.remove('selenium.log')
 
 
-                            def show_selenium_log():
-                                if os.path.exists('selenium.log'):
-                                    with open('selenium.log') as f:
-                                        content = f.read()
-                                        st.code(content)
+                            #def show_selenium_log():
+                            #    if os.path.exists('selenium.log'):
+                            #        with open('selenium.log') as f:
+                            #            content = f.read()
+                            #            st.code(content)
 
 
                             # not required anymore:
