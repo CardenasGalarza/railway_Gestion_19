@@ -201,6 +201,8 @@ if authentication_status:
     st.sidebar.title(f"Bienvenid@ {name}")
     #### fondo al costado
 
+    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,white, white);color:navy;font-size:24px;border-radius:2%;"><b>ENVIAR MENSAJE GESTION</b></p>', unsafe_allow_html=True)
+
 
     with st.form(key='my_form', clear_on_submit=True):
 
