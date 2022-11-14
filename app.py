@@ -678,7 +678,10 @@ if authentication_status:
             df = pd.read_sql(sql, cnxn)
             dfg = df[df['GESTOR'] == name]
             date = datetime.now()
-            tcanti = (date.strftime("%Y-%d-%m"))
+            ##TODO SIEMPRE VER ESTO PARA CONTADOR
+            ##FIXME SOLO CAMBIAR ESTO FIRMATO DE FECHA NO LO DE ABAJO
+            #tcanti = (date.strftime("%Y-%d-%m"))
+            tcanti = (date.strftime("%Y-%m-%d"))
             #print(tcanti)
         ##### cantidad de cerradas
             df = dfg
@@ -2021,6 +2024,5 @@ if authentication_status:
                 </style>
                 """
     st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-
 
 
