@@ -916,7 +916,7 @@ if authentication_status:
                                 mens = (df2['MENSAJE'].unique())
                                 mens = (str(mens)[2:-2])
 
-                                if mens > '0':
+                                if mens == '1':
                                     numllamada = (df2['LLAMADA'].unique())
                                     numllamada = (str(numllamada)[2:-2])
                                     #print(numllamada)
@@ -1807,10 +1807,10 @@ if authentication_status:
                             codcli =gian["CUSTOMERID_CRM__c"]
                             codcli = (codcli.to_string(index=False))
 
-                            numllamada = (gian['MENSAJE'].unique())
-                            numllamada = (str(numllamada)[2:-2])
-                            #print(numllamada)
-                            sumu = int(numllamada) + 1
+                            #numllamada = (gian['MENSAJE'].unique())
+                            #numllamada = (str(numllamada)[2:-2])
+                            ##print(numllamada)
+                            #sumu = int(numllamada) + 1
 
 
                             sql = "INSERT INTO bdmensaje (codreq, FECHA_ENV, SMS) VALUES (%s, %s, %s)"
@@ -1819,7 +1819,7 @@ if authentication_status:
                             #cnxn.commit()
                             sql1 = "UPDATE bdtickets SET MENSAJE = %s WHERE codreq = %s"
                             #sql1 = "INSERT INTO gestionacc (codreq, ACCION) VALUES (%s, %s)"
-                            val1 = (sumu, tick)
+                            val1 = ('1', tick)
                             cursor.execute(sql1, val1)
 
                             cnxn.commit()
