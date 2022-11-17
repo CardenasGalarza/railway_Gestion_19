@@ -949,8 +949,8 @@ if authentication_status:
                                         val1 = ('PENDIENTE',tiempohr, dfu2)
                                         cursor.execute(sql1, val1)
                                         cnxn.commit()
-                            else:
-                                st.error('Primero tienes que enviar SMS⚠️')
+                                else:
+                                    st.error('Primero tienes que enviar SMS⚠️')
                         except Error as e:
                             print('Gian', e)
             
