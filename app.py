@@ -1758,6 +1758,9 @@ if authentication_status:
 
                         with st.spinner('Enviado mensaje...'):
 
+                            date = datetime.now()
+                            tiempo = (date.strftime("%d-%m-%Y %H:%M:%S"))
+
                             cnxn = mysql.connector.connect( host="us-cdbr-east-06.cleardb.net",
                                                             port="3306",
                                                             user="b550dc65be0b71",
@@ -1769,26 +1772,51 @@ if authentication_status:
 
                             #cursor.execute("UPDATE bdtickets SET ESTADO = ?, GESTOR = ? WHERE codreq = ?", add, nom, adwe)
                             sql = """
-                            SELECT codreq, FEC_CERRAR, GESTOR FROM bdtickets WHERE codreq = %s ;
+                            SELECT codreq, CUSTOMERID_CRM__c, servicioAfectado, MENSAJE FROM bdtickets WHERE codreq = %s ;
                             """
                             ##TODO SIEMPRE PONER LA COMA
                             cursor.execute(sql, (tick,))
                             # fetch result
                             record = cursor.fetchall()
                             #print(record)
-                            cursor.close()
-                            cnxn.close()
+                            #cursor.close()
+                            #cnxn.close()
 
                             gian = pd.DataFrame(record)
-                            gian.columns = ['codreq', 'FEC_CERRAR', 'GESTOR']
+                            gian.columns = ['codreq', 'CUSTOMERID_CRM__c', 'servicioAfectado', 'MENSAJE']
                             #for row in record:
                             #    print("GESTOR = ", row[0], )
                             #    print("codreq = ", row[1])
                             #    print("FEC_CERRAR = ", row[2])
                             #dfg = gian[gian['GESTOR'] == 'Giancarlos Cardenas']
 
-                            desmotv =gian["codreq"]
-                            dfunom = (desmotv.to_string(index=False))
+                            tick =gian["codreq"]
+                            tick = (tick.to_string(index=False))
+
+                            servi =gian["servicioAfectado"]
+                            servi = (servi.to_string(index=False))
+
+                            codcli =gian["CUSTOMERID_CRM__c"]
+                            codcli = (codcli.to_string(index=False))
+
+                            numllamada = (gian['MENSAJE'].unique())
+                            numllamada = (str(numllamada)[2:-2])
+                            #print(numllamada)
+                            sumu = int(numllamada) + 1
+
+
+                            sql = "INSERT INTO bdmensaje (codreq, FECHA_ENV, SMS) VALUES (%s, %s, %s)"
+                            val = (tick, tiempo, mensaje)
+                            cursor.execute(sql, val)
+                            #cnxn.commit()
+                            sql1 = "UPDATE bdtickets SET MENSAJE = %s WHERE codreq = %s"
+                            #sql1 = "INSERT INTO gestionacc (codreq, ACCION) VALUES (%s, %s)"
+                            val1 = (sumu, tick)
+                            cursor.execute(sql1, val1)
+
+                            cnxn.commit()
+                            cursor.close()
+                            cnxn.close()
                             #print(dfunom)
 
                             import streamlit as st
@@ -1857,7 +1885,7 @@ if authentication_status:
 
                             xpath = driver.find_element("xpath", '//BUTTON[@type="submit"][text()="Ingresar"]')
                             xpath.click()
-                            time.sleep(3)
+                            time.sleep(4)
 
 
                             xpath = driver.find_element("xpath", '//*[@id="dropdown-user-menu"]/div/button[2]')
@@ -1878,7 +1906,7 @@ if authentication_status:
                             if 'SMS1' == mensaje:
 
                                 xpath = driver.find_element("xpath", '//TEXTAREA[@id="txtMessage"]')
-                                xpath.send_keys("MENSAJE 1" + " " + dfunom)
+                                xpath.send_keys(f"Hola, intentamos contactarte para solucionar la averia en tu {servi} {codcli}, estaremos contactandote nuevamente, Movistar.")
                                 time.sleep(6)
 
 
@@ -1901,26 +1929,26 @@ if authentication_status:
 
                                 with col1:
                                     st.markdown("**Numero de tickets**")
-                                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+                                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{tick}</p>', unsafe_allow_html=True)
 
                             
 
                                 with col2:
                                     st.markdown("**Numero de tickets**")
-                                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+                                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{codcli}</p>', unsafe_allow_html=True)
 
                             
 
                                 with col3:
                                     st.markdown("**Numero de tickets**")
-                                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+                                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{servi}</p>', unsafe_allow_html=True)
 
                             
                             if 'SMS2' == mensaje:
 
 
                                 xpath = driver.find_element("xpath", '//TEXTAREA[@id="txtMessage"]')
-                                xpath.send_keys("MENSAJE 2" + " " + dfunom)
+                                xpath.send_keys(f"Hola, intentamos contactarte para validar que tu {servi} {codcli} CodClient, ya se encuentra operativo, porfavor realizar las validaciones, Movistar")
                                 time.sleep(6)
 
 
@@ -1943,20 +1971,19 @@ if authentication_status:
 
                                 with col1:
                                     st.markdown("**Numero de tickets**")
-                                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+                                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{tick}</p>', unsafe_allow_html=True)
 
                             
 
                                 with col2:
                                     st.markdown("**Numero de tickets**")
-                                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
+                                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{codcli}</p>', unsafe_allow_html=True)
 
                             
 
                                 with col3:
                                     st.markdown("**Numero de tickets**")
-                                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{dfunom}</p>', unsafe_allow_html=True)
-
+                                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,LAVENDER, LAVENDER);color:BLACK;font-size:18px;border-radius:2%;">{servi}</p>', unsafe_allow_html=True)
 
 
 
