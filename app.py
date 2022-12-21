@@ -17,6 +17,7 @@ from datetime import datetime
 import gspread
 #import pyautogui
 from pkg_resources import working_set
+import os
 
 st.set_page_config(page_title='bdtickets-Averias', page_icon="🌀", layout='centered', initial_sidebar_state='auto')
 
