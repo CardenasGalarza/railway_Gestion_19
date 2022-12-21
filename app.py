@@ -23,7 +23,7 @@ from datetime import timedelta
 import gspread
 import re
 #import pyautogui
-
+from pkg_resources import working_set
 
 st.set_page_config(page_title='bdtickets-Averias', page_icon="🌀", layout='centered', initial_sidebar_state='auto')
 
@@ -203,261 +203,69 @@ if authentication_status:
 
     st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,white, white);color:navy;font-size:24px;border-radius:2%;"><b>ENVIAR MENSAJE GESTION</b></p>', unsafe_allow_html=True)
 
+    st.sidebar.subheader("Cargar datos de acuerdo a lo requerido")
 
-    with st.form(key='my_form', clear_on_submit=True):
-
-            import streamlit as st
-            import streamlit as st
-            from streamlit_option_menu import option_menu
-            import pickle
-            from pathlib import Path
-            import pandas as pd
-            import numpy as np
-            #from soupsieve import select  # pip install pandas openpyxl
-            import streamlit_authenticator as stauth  # pip install streamlit-authenticator
-            ############################################ OCULTAR INFROMACION NO IMPORTANTE
-            import base64
-            import mysql.connector
-            from mysql.connector import Error
-            #import pyodbc
-            import streamlit as st
-            ############################################ OCULTAR INFROMACION NO IMPORTANTE
-            import warnings
-            warnings.filterwarnings('ignore')
-            #########################################3333
-            ##########################
-            import time
-            from datetime import datetime
-            from datetime import timedelta
-            import gspread
-            import re
-
-
-            col1, col2, col3 = st.columns(3)
-
-            with col1:
-                tick = st.text_input('Tickets')
-            with col2:
-                celu = st.text_input('Numero')
-
-                
-
-            mensaje = st.selectbox(
-                "Mensaje",
-                (
-                    "SMS1",
-                    "SMS2",
-                ),
-                key="filter_type8",
-                help="""
-                Ten encuenta tu accion `Ticket` inf.
-                """,
-            )
-
-
-            #TODO SIVERVPARA BARRA AZUL
-            #celu = '925266696'
-            #print(celu)
-
-            st.balloons()
-        # Every form must have a submit button.
-
-            submitted = st.form_submit_button("✉️Enviar")
-
-
-            if submitted == True:
-
-                cnxn = mysql.connector.connect( host="us-cdbr-east-06.cleardb.net",
-                                                port="3306",
-                                                user="b550dc65be0b71",
-                                                passwd="a3fa9457",
-                                                db="heroku_af31a2d889c5388"
-                                                )
-                cursor = cnxn.cursor()
-
-
-                #cursor.execute("UPDATE bdtickets SET ESTADO = ?, GESTOR = ? WHERE codreq = ?", add, nom, adwe)
-                sql = """
-                SELECT codreq, FEC_CERRAR, GESTOR FROM bdtickets WHERE codreq = %s ;
-                """
-                ##TODO SIEMPRE PONER LA COMA
-                cursor.execute(sql, (tick,))
-                # fetch result
-                record = cursor.fetchall()
-                #print(record)
-                cursor.close()
-                cnxn.close()
-
-                gian = pd.DataFrame(record)
-                gian.columns = ['codreq', 'FEC_CERRAR', 'GESTOR']
-                #for row in record:
-                #    print("GESTOR = ", row[0], )
-                #    print("codreq = ", row[1])
-                #    print("FEC_CERRAR = ", row[2])
-                #dfg = gian[gian['GESTOR'] == 'Giancarlos Cardenas']
-
-                desmotv =gian["codreq"]
-                dfunom = (desmotv.to_string(index=False))
-                #print(dfunom)
-
-                import streamlit as st
-                import glob
-                import os
-                import time
+            # Setup file upload
+    uploaded_file = st.sidebar.file_uploader(
+                            label="Solo cargar data TT y CMR. (200MB max)",
+                            type=['csv', 'xlsx', 'XLS'])
 
-                import streamlit as st
-                from selenium import webdriver
-                from selenium.webdriver.chrome.options import Options
-                from selenium.webdriver.support.wait import WebDriverWait
-                from selenium.webdriver.common.by import By
+    global df
+    if uploaded_file is not None:
+        #print(uploaded_file)
+        #print("hello")
 
-                options = Options()
-                options.add_argument("--headless")
-                options.add_argument("--no-sandbox")
-                options.add_argument("--disable-dev-shm-usage")
-                options.add_argument("--disable-gpu")
-                options.add_argument("--disable-features=NetworkService")
-                options.add_argument("--window-size=1920x1080")
-                options.add_argument("--disable-features=VizDisplayCompositor")
+        with st.spinner('Procesando los datos...'):
 
-                
+            try:
+                #df = pd.read_excel('dic_20_Copia de PasaParametros.xlsx', sheet_name = 'Para Liquidar', skiprows = 15, usecols = 'B').iloc[:-1]
+                df = pd.read_excel(uploaded_file, engine="openpyxl", sheet_name = 'Para Liquidar', skiprows = 15, usecols = 'B').iloc[:-1]
+                #https://es.stackoverflow.com/questions/350681/como-extraer-tablas-de-un-excel-para-cruzar-con-otra-base-de-excel-en-python
+                #df = pd.read_excel('CARGARGILLERMO.xlsx')
+                columdf = len(df.columns)
+                print(columdf)
 
-                def delete_selenium_log():
-                    if os.path.exists('selenium.log'):
-                        os.remove('selenium.log')
+                if columdf == 1:
 
+                    now = datetime.today().strftime('%Y-%m-%d')
 
-                def show_selenium_log():
-                    if os.path.exists('selenium.log'):
-                        with open('selenium.log') as f:
-                            content = f.read()
-                            st.code(content)
+                    df['fecha'] = np.nan
+                    df['fecha'] = df['fecha'].fillna(now)
 
+                    df.columns = ['codliq', 'fecha']
 
-                # not required anymore:
-                # def get_chromedriver_path():
-                #     results = glob.glob('/**/chromedriver', recursive=True)  # workaround on streamlit sharing
-                #     return results[0]
-                #st.button("Inicio")
+                    #print(df)
 
-                st.balloons()
+                    df = df.fillna('')
+                    df["codliq"]=df["codliq"].astype(str)
 
-                
+                    gc = gspread.service_account(filename='datacargar-947843f340e2.json')
+                    sh = gc.open("guille_app")
 
-                driver = webdriver.Chrome(options=options, service_log_path='selenium.log')
+                    #  el 0 simbol del numero de hoja en este caso es la primera hoja = 0
+                    worksheet = sh.get_worksheet(0)
 
-                username = 'caramburu_TDP'
-                passwordd = 'WebSys29*T*'
-                driver.get("https://auth.movistaradvertising.com/login?logout")
-                time.sleep(1)
+                    df1 = pd.DataFrame(worksheet.get_all_records())
 
-                #pyautogui.hotkey("ctrl","F5")
 
-                
+                    df1["codliq"]=df1["codliq"].astype(str)
+                    #######
+                    ## TODO UNIR BASE DE DATOS MYSQL Y GOOGLE
+                    #######
+                    union = pd.concat([df, df1])
+                    #print(len(union))
+                    union = union.drop_duplicates(subset=['codliq'])
 
-                xpath = driver.find_element("xpath", '//INPUT[@id="username"]')
-                xpath.send_keys(username)
-                time.sleep(2)
+                    union = union.sort_values(by='fecha')
+                    #borrar datos total y dejar encabezado
+                    worksheet.resize(rows=1)
+                    worksheet.resize(rows=30)
+                    #cargar datos df
+                    worksheet.update([union.columns.values.tolist()] + union.values.tolist())
 
-                xpath = driver.find_element("xpath", '//INPUT[@id="password"]')
-                xpath.send_keys(passwordd)
-                time.sleep(2)
 
-
-                xpath = driver.find_element("xpath", '//BUTTON[@type="submit"][text()="Ingresar"]')
-                xpath.click()
-                time.sleep(3)
-
-
-                xpath = driver.find_element("xpath", '//*[@id="dropdown-user-menu"]/div/button[2]')
-                xpath.click()
-                time.sleep(4)
-
-                xpath = driver.find_element("xpath", '//SPAN[@_ngcontent-c1=""][text()="SMSi"]')
-                xpath.click()
-                time.sleep(4)
-
-                #celu = '925266696'
-                #mensaje = 'Listoooossdddssss'
-
-                xpath = driver.find_element("xpath", '//INPUT[@id="inputGsmList"]')
-                xpath.send_keys(celu)
-                time.sleep(6)
-
-                if 'SMS1' == mensaje:
-
-                    xpath = driver.find_element("xpath", '//TEXTAREA[@id="txtMessage"]')
-                    xpath.send_keys("MENSAJE 1" + " " + dfunom)
-                    time.sleep(6)
-
-
-                    xpath = driver.find_element("xpath", '//BUTTON[@id="buttonProcess"]')
-                    xpath.click()
-                    time.sleep(6)
-
-                    xpath = driver.find_element("xpath", '//*[@id="buttonSend"]')
-                    xpath.click()
-                    time.sleep(5)
-
-                    driver.quit()
-
-                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,Cyan, Cyan);color:BLACK;font-size:16px;border-radius:2%;">Mensaje enviado</p>', unsafe_allow_html=True)
-                    #st.success('Mensaje enviado')
-                    st.balloons()
-                    #st.experimental_rerun()
-
-
-                
-                if 'SMS2' == mensaje:
-
-
-                    xpath = driver.find_element("xpath", '//TEXTAREA[@id="txtMessage"]')
-                    xpath.send_keys("MENSAJE 2" + " " + dfunom)
-                    time.sleep(6)
-
-
-                    xpath = driver.find_element("xpath", '//BUTTON[@id="buttonProcess"]')
-                    xpath.click()
-                    time.sleep(6)
-
-                    xpath = driver.find_element("xpath", '//*[@id="buttonSend"]')
-                    xpath.click()
-                    time.sleep(5)
-
-                    driver.quit()
-
-                    st.markdown(f'<p class="big-font"; style="text-align:center;background-image: linear-gradient(to right,Cyan, Cyan);color:BLACK;font-size:16px;border-radius:2%;">Mensaje enviado</p>', unsafe_allow_html=True)
-
-                    #st.success('Mensaje enviado')
-                    st.balloons()
-                    #st.experimental_rerun()
-
-
-
-
-
-            st.sidebar.markdown('')
-            st.sidebar.markdown('')
-            st.sidebar.markdown('')
-            st.sidebar.markdown('')
-            st.sidebar.markdown('')
-            st.sidebar.markdown('')
-            st.sidebar.markdown('')
-            st.sidebar.markdown('')
-            st.sidebar.markdown('')
-            st.sidebar.markdown('')
-            st.sidebar.markdown('')
-            st.sidebar.markdown('')
-            st.sidebar.markdown('')
-            st.sidebar.markdown('')
-            st.sidebar.markdown('')
-            st.sidebar.markdown('')
-
-            st.sidebar.markdown(
-            '<p class="big-font"; style="text-align:center;color:Lime;font-size:16px;border-radius:2%;">©👨🏻‍💻Giancarlos .C</p>', unsafe_allow_html=True
-            )
-                
-
+            except Exception as e:
+                st.error('DATA NO CORRESPONDE 👋🏻')
 
 ## fondo total
 def add_bg_from_url():
@@ -474,3 +282,24 @@ def add_bg_from_url():
         unsafe_allow_html=True
     )
 add_bg_from_url()
+
+st.sidebar.markdown('')
+st.sidebar.markdown('')
+st.sidebar.markdown('')
+st.sidebar.markdown('')
+st.sidebar.markdown('')
+st.sidebar.markdown('')
+st.sidebar.markdown('')
+st.sidebar.markdown('')
+st.sidebar.markdown('')
+st.sidebar.markdown('')
+st.sidebar.markdown('')
+st.sidebar.markdown('')
+st.sidebar.markdown('')
+st.sidebar.markdown('')
+st.sidebar.markdown('')
+st.sidebar.markdown('')
+
+st.sidebar.markdown(
+'<p class="big-font"; style="text-align:center;color:Lime;font-size:16px;border-radius:2%;">©👨🏻‍💻Giancarlos .C</p>', unsafe_allow_html=True
+)
