@@ -1,5 +1,4 @@
 import streamlit as st
-from streamlit_option_menu import option_menu
 import pickle
 from pathlib import Path
 import pandas as pd
@@ -8,20 +7,14 @@ import numpy as np
 import streamlit_authenticator as stauth  # pip install streamlit-authenticator
 ############################################ OCULTAR INFROMACION NO IMPORTANTE
 import base64
-import mysql.connector
-from mysql.connector import Error
-#import pyodbc
 import streamlit as st
 ############################################ OCULTAR INFROMACION NO IMPORTANTE
 import warnings
 warnings.filterwarnings('ignore')
 #########################################3333
 ##########################
-import time
 from datetime import datetime
-from datetime import timedelta
 import gspread
-import re
 #import pyautogui
 from pkg_resources import working_set
 
